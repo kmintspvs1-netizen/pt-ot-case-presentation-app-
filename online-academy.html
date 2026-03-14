@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Academy</title>
+  <style>
+    :root {
+      --bg: #fffaf2;
+      --panel: rgba(255, 255, 255, 0.82);
+      --panel-strong: #ffffff;
+      --text: #14213d;
+      --muted: #5f6b85;
+      --accent: #ff6b35;
+      --accent-soft: #ffd166;
+      --accent-alt: #00bcd4;
+      --accent-deep: #0f9b8e;
+      --border: rgba(20, 33, 61, 0.09);
+      --shadow: 0 24px 60px rgba(20, 33, 61, 0.12);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --max-width: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", "Avenir Next", "Trebuchet MS", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255, 209, 102, 0.55), transparent 28%),
+        radial-gradient(circle at 85% 12%, rgba(0, 188, 212, 0.3), transparent 24%),
+        linear-gradient(180deg, #fffdf8 0%, #fff4e6 48%, #fffdf8 100%);
+      min-height: 100vh;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .shell {
+      width: min(var(--max-width), calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 250, 242, 0.72);
+      border-bottom: 1px solid rgba(20, 33, 61, 0.06);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(255, 107, 53, 0.28);
+    }
+
+    .topbar nav {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .topbar nav a {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .cta-link {
+      padding: 0.8rem 1.1rem;
+      border-radius: 999px;
+      background: var(--text);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .hero {
+      padding: 4.5rem 0 3rem;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 0.55rem;
+      align-items: center;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 107, 53, 0.12);
+      color: var(--accent);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 1rem 0;
+      font-size: clamp(2.6rem, 5vw, 5.3rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-copy p,
+    .section-copy {
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      max-width: 62ch;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 1.8rem 0 2rem;
+    }
+
+    .button {
+      border: 0;
+      cursor: pointer;
+      padding: 0.95rem 1.35rem;
+      border-radius: 999px;
+      font: inherit;
+      font-weight: 700;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent) 0%, #ff8457 100%);
+      box-shadow: 0 18px 28px rgba(255, 107, 53, 0.28);
+    }
+
+    .button-secondary {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(20, 33, 61, 0.08);
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .metric {
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-lg);
+      padding: 1.2rem;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.7rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 540px;
+    }
+
+    .visual-panel,
+    .floating-card {
+      position: absolute;
+      border-radius: var(--radius-xl);
+      background: var(--panel);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .visual-panel {
+      inset: 2rem 0 2rem 2rem;
+      overflow: hidden;
+      padding: 1.8rem;
+      background:
+        linear-gradient(160deg, rgba(255, 255, 255, 0.85), rgba(255, 244, 230, 0.9)),
+        linear-gradient(135deg, rgba(255, 209, 102, 0.5), rgba(0, 188, 212, 0.12));
+    }
+
+    .learning-path {
+      display: grid;
+      gap: 0.9rem;
+      margin-top: 1.4rem;
+    }
+
+    .path-step {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 0.9rem;
+      align-items: center;
+      padding: 1rem;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(20, 33, 61, 0.05);
+    }
+
+    .step-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .step-badge.code { background: linear-gradient(135deg, #ff6b35, #ff9f68); }
+    .step-badge.design { background: linear-gradient(135deg, #00bcd4, #45d8ea); }
+    .step-badge.growth { background: linear-gradient(135deg, #0f9b8e, #3fcf9c); }
+
+    .path-step small,
+    .panel-note,
+    .card-label,
+    .pill,
+    .form-note,
+    .footer-note {
+      color: var(--muted);
+    }
+
+    .floating-card {
+      padding: 1rem 1.1rem;
+    }
+
+    .floating-card.top {
+      top: 0;
+      right: 1rem;
+      width: 210px;
+    }
+
+    .floating-card.bottom {
+      left: 0;
+      bottom: 0;
+      width: 230px;
+    }
+
+    .card-value {
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin: 0.35rem 0;
+    }
+
+    section {
+      padding: 1.4rem 0 4rem;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: clamp(1.9rem, 3vw, 3rem);
+      letter-spacing: -0.03em;
+    }
+
+    .course-grid {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 1.5rem;
+    }
+
+    .course-list,
+    .syllabus-panel,
+    .instructor-card,
+    .enrollment-card {
+      background: var(--panel);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+      backdrop-filter: blur(12px);
+    }
+
+    .course-list {
+      padding: 1rem;
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .course-option {
+      border: 1px solid transparent;
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.8);
+      padding: 1rem;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color 180ms ease, transform 180ms ease, background 180ms ease;
+    }
+
+    .course-option:hover,
+    .course-option:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(20, 33, 61, 0.08);
+    }
+
+    .course-option.active {
+      background: linear-gradient(135deg, rgba(255, 209, 102, 0.32), rgba(255, 255, 255, 0.95));
+      border-color: rgba(255, 107, 53, 0.26);
+    }
+
+    .course-option h3,
+    .instructor-card h3,
+    .enrollment-card h3,
+    .syllabus-header h3 {
+      margin: 0 0 0.4rem;
+    }
+
+    .pills {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.85rem;
+    }
+
+    .pill {
+      padding: 0.42rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(20, 33, 61, 0.06);
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .syllabus-panel {
+      padding: 1.6rem;
+      display: grid;
+      gap: 1.2rem;
+    }
+
+    .syllabus-header {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .syllabus-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .meta-chip {
+      padding: 0.45rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(0, 188, 212, 0.1);
+      color: #00798a;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .syllabus-list {
+      display: grid;
+      gap: 0.8rem;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .syllabus-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.9rem;
+      align-items: start;
+      padding: 1rem;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(20, 33, 61, 0.05);
+    }
+
+    .syllabus-item-number {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 107, 53, 0.14);
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .instructor-card,
+    .enrollment-card {
+      padding: 1.6rem;
+    }
+
+    .profile {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .avatar {
+      width: 84px;
+      height: 84px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(0, 188, 212, 0.18), rgba(255, 209, 102, 0.5));
+      display: grid;
+      place-items: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .highlights {
+      display: grid;
+      gap: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    .highlight {
+      padding: 0.95rem 1rem;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(20, 33, 61, 0.05);
+    }
+
+    form {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    label {
+      display: grid;
+      gap: 0.4rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(20, 33, 61, 0.1);
+      border-radius: 16px;
+      padding: 0.95rem 1rem;
+      font: inherit;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.85);
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: 2px solid rgba(255, 107, 53, 0.22);
+      border-color: rgba(255, 107, 53, 0.45);
+    }
+
+    .form-status {
+      min-height: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-deep);
+    }
+
+    footer {
+      padding: 0 0 2.5rem;
+    }
+
+    .footer-panel {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.25rem 1.4rem;
+      border-radius: 22px;
+      background: rgba(20, 33, 61, 0.96);
+      color: #fff;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      animation: rise 700ms ease forwards;
+    }
+
+    .delay-1 { animation-delay: 120ms; }
+    .delay-2 { animation-delay: 220ms; }
+    .delay-3 { animation-delay: 320ms; }
+
+    @keyframes rise {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 960px) {
+      .hero,
+      .course-grid,
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        min-height: 420px;
+      }
+
+      .visual-panel {
+        inset: 1.5rem 0 2.5rem 0;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .topbar-inner,
+      .section-heading,
+      .profile,
+      .footer-panel {
+        align-items: start;
+      }
+
+      .hero {
+        padding-top: 2.5rem;
+      }
+
+      .hero-metrics,
+      .field-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .floating-card.top,
+      .floating-card.bottom {
+        position: static;
+        width: auto;
+        margin-top: 1rem;
+      }
+
+      .hero-visual {
+        min-height: auto;
+      }
+
+      .visual-panel {
+        position: relative;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="#top" aria-label="Online Academy ホーム">
+        <span class="brand-mark">OA</span>
+        <span>Online Academy</span>
+      </a>
+      <nav aria-label="メインナビゲーション">
+        <a href="#courses">コース</a>
+        <a href="#instructor">講師紹介</a>
+        <a href="#enroll" class="cta-link">申込み</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top" class="shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow reveal">学びを明るく、成果を確かに。</span>
+        <h1 class="reveal delay-1">コーディング、デザイン、マーケティングを一つの学び場で。</h1>
+        <p class="reveal delay-2">
+          Online Academyは、ライブ授業、実践課題、講師フィードバックを通して、実務につながるデジタルスキルを育てるオンライン学習サービスです。キャリアチェンジを目指す方にも、スキルアップしたい方にも、柔軟で続けやすい学習体験を提供します。
+        </p>
+        <div class="hero-actions reveal delay-3">
+          <a class="button button-primary" href="#courses">コースを見る</a>
+          <a class="button button-secondary" href="#enroll">受講を申し込む</a>
+        </div>
+        <div class="hero-metrics">
+          <article class="metric reveal">
+            <strong>24+</strong>
+            <span class="panel-note">実践重視の学習モジュールを幅広く用意。</span>
+          </article>
+          <article class="metric reveal delay-1">
+            <strong>92%</strong>
+            <span class="panel-note">受講後にポートフォリオ掲載可能な成果物を完成。</span>
+          </article>
+          <article class="metric reveal delay-2">
+            <strong>毎週</strong>
+            <span class="panel-note">ライブ添削、相談会、学習サポートを実施。</span>
+          </article>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="visual-panel reveal delay-1">
+          <p class="card-label">学習パスのハイライト</p>
+          <h2>目的に合わせて選び、横断的にスキルを伸ばせます。</h2>
+          <p class="section-copy">それぞれのコースは、学習内容と制作課題を組み合わせ、学んだことをその日のうちに実践へつなげられる設計です。</p>
+          <div class="learning-path">
+            <div class="path-step">
+              <span class="step-badge code">01</span>
+              <div>
+                <strong>コーディング基礎</strong>
+                <small>HTML、CSS、JavaScript、Git、開発の基本習慣。</small>
+              </div>
+              <span class="pill">8週間</span>
+            </div>
+            <div class="path-step">
+              <span class="step-badge design">02</span>
+              <div>
+                <strong>UIデザイン実践</strong>
+                <small>ブランド設計、レイアウト、アクセシビリティ、UI思考。</small>
+              </div>
+              <span class="pill">6週間</span>
+            </div>
+            <div class="path-step">
+              <span class="step-badge growth">03</span>
+              <div>
+                <strong>マーケティング実践</strong>
+                <small>施策設計、分析、コンテンツ運用、継続改善。</small>
+              </div>
+              <span class="pill">5週間</span>
+            </div>
+          </div>
+        </div>
+        <aside class="floating-card top reveal delay-2">
+          <p class="card-label">次回開講</p>
+          <div class="card-value">4月22日</div>
+          <small>すべての授業はライブ配信＋アーカイブ視聴に対応しています。</small>
+        </aside>
+        <aside class="floating-card bottom reveal delay-3">
+          <p class="card-label">受講生の声</p>
+          <div class="card-value">4.9/5</div>
+          <small>「続けやすい設計で、忙しくてもしっかり学べました。」</small>
+        </aside>
+      </div>
+    </section>
+
+    <section id="courses">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">コースシラバス</span>
+          <h2>気になる分野を切り替えながら、学べる内容を確認できます。</h2>
+        </div>
+        <p class="section-copy">各コースでは、ライブ授業、課題フィードバック、卒業後も活用できるテンプレートを組み合わせて学習します。</p>
+      </div>
+
+      <div class="course-grid">
+        <div class="course-list" role="tablist" aria-label="コース選択">
+          <button class="course-option active" type="button" data-course="coding" role="tab" aria-selected="true">
+            <h3>フルスタック・コーディング講座</h3>
+            <p class="panel-note">レスポンシブUI、API連携、公開可能な制作物まで学びます。</p>
+            <div class="pills">
+              <span class="pill">初心者歓迎</span>
+              <span class="pill">実践課題あり</span>
+            </div>
+          </button>
+          <button class="course-option" type="button" data-course="design" role="tab" aria-selected="false">
+            <h3>UIデザイン・スタジオ</h3>
+            <p class="panel-note">使いやすく魅力的なUIを、設計思考と添削を通じて磨きます。</p>
+            <div class="pills">
+              <span class="pill">作品集対応</span>
+              <span class="pill">Figma活用</span>
+            </div>
+          </button>
+          <button class="course-option" type="button" data-course="marketing" role="tab" aria-selected="false">
+            <h3>デジタルマーケティング講座</h3>
+            <p class="panel-note">施策立案、分析、改善までを実務視点で学べます。</p>
+            <div class="pills">
+              <span class="pill">分析力</span>
+              <span class="pill">コンテンツ戦略</span>
+            </div>
+          </button>
+        </div>
+
+        <article class="syllabus-panel" aria-live="polite">
+          <div class="syllabus-header">
+            <span class="eyebrow" id="course-category">コーディングコース</span>
+            <h3 id="course-title">フルスタック・コーディング講座</h3>
+            <p class="section-copy" id="course-description">基礎から公開までを体験しながら、現代的なWeb制作の流れを実践的に学びます。</p>
+            <div class="syllabus-meta">
+              <span class="meta-chip" id="course-duration">8週間</span>
+              <span class="meta-chip" id="course-format">ライブ授業＋録画視聴</span>
+              <span class="meta-chip" id="course-level">レベル: 初級〜中級</span>
+            </div>
+          </div>
+          <ul class="syllabus-list" id="syllabus-list"></ul>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">講師紹介</span>
+          <h2>戦略、表現、実装をつなぐ講師が、学びを伴走します。</h2>
+        </div>
+        <p class="section-copy">このプログラムは、わかりやすい解説、すぐに活かせるフィードバック、実践に移しやすい事例を重視して設計されています。</p>
+      </div>
+
+      <div class="details-grid">
+        <article class="instructor-card" id="instructor">
+          <div class="profile">
+            <div class="avatar" aria-hidden="true">AL</div>
+            <div>
+              <h3>Avery Lee</h3>
+              <p class="panel-note">主任講師 / デジタルプロダクト教育者</p>
+            </div>
+          </div>
+          <p class="section-copy">
+            Averyは12年以上にわたり、スタートアップや教育チーム向けに、複雑なデジタル領域を実践的な学習プログラムへ落とし込んできました。プロダクト開発、ビジュアル表現、顧客成長の視点を横断しながら、それぞれの分野がどうつながるのかを丁寧に伝えます。
+          </p>
+          <div class="highlights">
+            <div class="highlight">
+              <strong>分野横断の指導</strong>
+              <p class="panel-note">フロントエンド開発の基盤を持ち、デザイン責任者やグロース戦略担当としての経験も豊富です。</p>
+            </div>
+            <div class="highlight">
+              <strong>前に進めるためのフィードバック</strong>
+              <p class="panel-note">抽象的な励ましではなく、達成段階に応じた具体的な改善提案を届けます。</p>
+            </div>
+            <div class="highlight">
+              <strong>実務に近い成果物</strong>
+              <p class="panel-note">ランディングページ、プロトタイプ、ダッシュボード、施策企画書など、現場で使われるアウトプットに取り組みます。</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="enrollment-card" id="enroll">
+          <span class="eyebrow">受講申込み</span>
+          <h3>申込みフォーム</h3>
+          <p class="form-note">学びたい内容を教えてください。最適なコースをご案内します。</p>
+          <form id="enrollment-form">
+            <div class="field-grid">
+              <label>
+                お名前
+                <input type="text" name="name" placeholder="山田 花子" required>
+              </label>
+              <label>
+                メールアドレス
+                <input type="email" name="email" placeholder="hanako@example.com" required>
+              </label>
+            </div>
+            <div class="field-grid">
+              <label>
+                希望コース
+                <select name="course" id="course-select" required>
+                  <option value="coding">フルスタック・コーディング講座</option>
+                  <option value="design">UIデザイン・スタジオ</option>
+                  <option value="marketing">デジタルマーケティング講座</option>
+                </select>
+              </label>
+              <label>
+                現在のレベル
+                <select name="level" required>
+                  <option value="">選択してください</option>
+                  <option>未経験</option>
+                  <option>少し経験がある</option>
+                  <option>実務経験がある</option>
+                </select>
+              </label>
+            </div>
+            <label>
+              学習目的
+              <textarea name="goals" rows="5" placeholder="ポートフォリオを作りたい、実務に活かせる力を身につけたい、添削を受けながら学びたい など" required></textarea>
+            </label>
+            <button class="button button-primary" type="submit">申込みを送信</button>
+            <div class="form-status" id="form-status" aria-live="polite"></div>
+          </form>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell">
+    <div class="footer-panel">
+      <div>
+        <strong>Online Academy</strong>
+        <p class="footer-note">明るく学びやすいUIと、実践課題、講師サポートを備えたオンライン講座。</p>
+      </div>
+      <div>
+        <strong>受講形式</strong>
+        <p class="footer-note">ライブ配信、見返し用アーカイブ、学習テンプレート、週次相談会を提供します。</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const courses = {
+      coding: {
+        category: "コーディングコース",
+        title: "フルスタック・コーディング講座",
+        description: "基礎から公開までを体験しながら、現代的なWeb制作の流れを実践的に学びます。",
+        duration: "8週間",
+        format: "ライブ授業＋録画視聴",
+        level: "レベル: 初級〜中級",
+        syllabus: [
+          ["第1週", "HTMLとセマンティックな構造を学び、読みやすく壊れにくいUIの基礎をつくります。"],
+          ["第2週", "CSSレイアウト、配色、余白設計、レスポンシブ対応を実践します。"],
+          ["第3週", "JavaScriptの基礎、DOM操作、UIの状態管理の考え方を身につけます。"],
+          ["第4週", "API連携、非同期処理、データを扱うフロントエンド実装に取り組みます。"],
+          ["第5週", "Gitの基本、共同開発の流れ、保守しやすい構成を学びます。"],
+          ["第6〜8週", "最終制作、公開、デバッグ、ポートフォリオ整理まで行います。"]
+        ]
+      },
+      design: {
+        category: "デザインコース",
+        title: "UIデザイン・スタジオ",
+        description: "見やすさと使いやすさを両立したUIを、設計思考と制作演習を通して学びます。",
+        duration: "6週間",
+        format: "添削会＋テンプレート配布",
+        level: "レベル: 初級〜中級",
+        syllabus: [
+          ["第1週", "デザインの基本原則、視線誘導、画面構成の理解を深めます。"],
+          ["第2週", "ユーザーフロー、ワイヤーフレーム、素早い改善サイクルを学びます。"],
+          ["第3週", "配色、タイポグラフィ、余白設計、アクセシブルなUIパターンを扱います。"],
+          ["第4週", "Figmaでのコンポーネント設計、デザインシステムの作り方を実践します。"],
+          ["第5週", "プロトタイプ検証、フィードバック整理、意図の言語化を行います。"],
+          ["第6週", "ポートフォリオ用ケーススタディの作成と発表準備を進めます。"]
+        ]
+      },
+      marketing: {
+        category: "マーケティングコース",
+        title: "デジタルマーケティング講座",
+        description: "伝わる企画と改善できる分析力を身につけ、再現性のあるマーケティング施策を学びます。",
+        duration: "5週間",
+        format: "施策演習＋分析レビュー",
+        level: "レベル: 初級〜上級",
+        syllabus: [
+          ["第1週", "ターゲット理解、訴求整理、チャネル選定の基礎を学びます。"],
+          ["第2週", "コンテンツ戦略、メッセージ設計、配信計画の立て方を扱います。"],
+          ["第3週", "LP改善、メール導線、コンバージョン最適化の基本を実践します。"],
+          ["第4週", "ダッシュボード設計、レポーティング、検証設計を学びます。"],
+          ["第5週", "継続率向上、グロースループ、最終施策発表を行います。"]
+        ]
+      }
+    };
+
+    const optionButtons = document.querySelectorAll(".course-option");
+    const syllabusList = document.getElementById("syllabus-list");
+    const courseCategory = document.getElementById("course-category");
+    const courseTitle = document.getElementById("course-title");
+    const courseDescription = document.getElementById("course-description");
+    const courseDuration = document.getElementById("course-duration");
+    const courseFormat = document.getElementById("course-format");
+    const courseLevel = document.getElementById("course-level");
+    const courseSelect = document.getElementById("course-select");
+    const enrollmentForm = document.getElementById("enrollment-form");
+    const formStatus = document.getElementById("form-status");
+
+    function renderCourse(courseKey) {
+      const course = courses[courseKey];
+      courseCategory.textContent = course.category;
+      courseTitle.textContent = course.title;
+      courseDescription.textContent = course.description;
+      courseDuration.textContent = course.duration;
+      courseFormat.textContent = course.format;
+      courseLevel.textContent = course.level;
+      courseSelect.value = courseKey;
+
+      syllabusList.innerHTML = "";
+      course.syllabus.forEach((item, index) => {
+        const row = document.createElement("li");
+        row.className = "syllabus-item";
+        row.innerHTML = `
+          <div class="syllabus-item-number">${index + 1}</div>
+          <div>
+            <strong>${item[0]}</strong>
+            <p class="panel-note">${item[1]}</p>
+          </div>
+        `;
+        syllabusList.appendChild(row);
+      });
+
+      optionButtons.forEach((button) => {
+        const isActive = button.dataset.course === courseKey;
+        button.classList.toggle("active", isActive);
+        button.setAttribute("aria-selected", String(isActive));
+      });
+    }
+
+    optionButtons.forEach((button) => {
+      button.addEventListener("click", () => renderCourse(button.dataset.course));
+    });
+
+    courseSelect.addEventListener("change", (event) => {
+      renderCourse(event.target.value);
+    });
+
+    enrollmentForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const data = new FormData(enrollmentForm);
+      const name = data.get("name");
+      const courseKey = data.get("course");
+      formStatus.textContent = `${name}さん、「${courses[courseKey].title}」へのお申込みを受け付けました。近日中にご案内をメールでお送りします。`;
+      enrollmentForm.reset();
+      renderCourse(courseKey);
+    });
+
+    renderCourse("coding");
+  </script>
+</body>
+</html>

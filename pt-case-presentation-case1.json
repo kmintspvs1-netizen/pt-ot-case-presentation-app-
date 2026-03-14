@@ -1,0 +1,77 @@
+{
+  "title": "PT Case Presentation",
+  "subtitle": "Initial Evaluation: Lumbar Spinal Stenosis",
+  "slides": [
+    {
+      "title": "Case Overview",
+      "bullets": [
+        "Diagnosis: Lumbar spinal stenosis",
+        "70-year-old male",
+        "Conservative treatment",
+        "Lives alone; needs subway and bus for hospital visits"
+      ]
+    },
+    {
+      "title": "Chief Complaint and Goal",
+      "bullets": [
+        "Chief complaint: unable to walk independently",
+        "Goal: independent outdoor ambulation with cane or walker",
+        "Current mobility: independent wheelchair mobility"
+      ]
+    },
+    {
+      "title": "Evaluation Findings",
+      "bullets": [
+        "Low back pain during bed mobility and transfers",
+        "Limited left hip flexion ROM",
+        "Left lower extremity strength at MMT 4 level",
+        "FBS: 24 points",
+        "Moderate superficial sensory dullness in left lower extremity"
+      ]
+    },
+    {
+      "title": "Gait and Precautions",
+      "bullets": [
+        "Left knee back knee during gait",
+        "Quadriceps-dominant compensation observed",
+        "Corset in use",
+        "Left lower extremity DVT"
+      ]
+    },
+    {
+      "title": "Problem List",
+      "bullets": [
+        "Reduced left lower extremity support",
+        "Reduced sensory input during standing and gait",
+        "Decreased balance with high fall risk",
+        "Inefficient and unsafe gait pattern",
+        "Insufficient outdoor mobility for independent living"
+      ]
+    },
+    {
+      "title": "Clinical Interpretation",
+      "bullets": [
+        "Pain, ROM restriction, weakness, sensory loss, and poor balance limit gait independence",
+        "Back knee likely appears as compensation for poor left-side support",
+        "Practical outdoor walking ability is essential due to living situation"
+      ]
+    },
+    {
+      "title": "Current Treatment and Rationale",
+      "bullets": [
+        "Barefoot standing balance practice: target standing control and sensory use",
+        "Ergometer: maintain activity level and endurance with lower walking load",
+        "Exercise therapy in lumbar spinal stenosis is associated with improved pain and function"
+      ]
+    },
+    {
+      "title": "Treatment Plan and Goals",
+      "bullets": [
+        "Prioritize safety with DVT, pain, and corset precautions",
+        "Improve left lower extremity support and standing balance",
+        "Reduce gait compensation and improve walking stability",
+        "Aim for independent outdoor ambulation with cane or walker"
+      ]
+    }
+  ]
+}

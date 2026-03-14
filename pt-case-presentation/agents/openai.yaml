@@ -1,0 +1,4 @@
+interface:
+  display_name: "PT Case Presentation"
+  short_description: "Build PT case presentations fast"
+  default_prompt: "Use $pt-case-presentation to draft an initial or final physical therapy case presentation from the provided case details."

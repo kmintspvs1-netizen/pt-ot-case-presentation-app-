@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ameblo Image Generator</title>
+  <style>
+    :root {
+      --bg: #f6f1eb;
+      --panel: rgba(255, 252, 247, 0.88);
+      --panel-strong: #fffaf3;
+      --text: #2f2721;
+      --muted: #73675c;
+      --accent: #b55f3b;
+      --accent-dark: #8d4325;
+      --border: rgba(86, 61, 43, 0.12);
+      --shadow: 0 20px 60px rgba(58, 41, 29, 0.12);
+      --radius: 24px;
+      --font-ui: "Avenir Next", "Hiragino Sans", "Yu Gothic", sans-serif;
+      --font-display: "Georgia", "Times New Roman", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-ui);
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.92), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(229, 188, 164, 0.26), transparent 22%),
+        linear-gradient(145deg, #f9f4ef 0%, #f1e3d7 45%, #ead7c6 100%);
+    }
+
+    .shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 48px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      margin: 0;
+      font-size: 0.82rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 0.96;
+      font-weight: 700;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(320px, 440px) minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .controls {
+      padding: 24px;
+      position: sticky;
+      top: 18px;
+    }
+
+    .panel-title {
+      margin: 0 0 8px;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .panel-copy {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 320px;
+      resize: vertical;
+      border: 1px solid rgba(109, 80, 60, 0.16);
+      border-radius: 18px;
+      padding: 18px 18px 20px;
+      font: inherit;
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.92);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: rgba(181, 95, 59, 0.5);
+      box-shadow: 0 0 0 4px rgba(181, 95, 59, 0.14);
+      transform: translateY(-1px);
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    button,
+    .download-link {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 14px 22px;
+      font: inherit;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent) 0%, #d58457 100%);
+      box-shadow: 0 16px 30px rgba(181, 95, 59, 0.28);
+    }
+
+    .secondary {
+      color: var(--accent-dark);
+      background: rgba(181, 95, 59, 0.1);
+      box-shadow: inset 0 0 0 1px rgba(181, 95, 59, 0.16);
+    }
+
+    button:hover,
+    .download-link:hover {
+      transform: translateY(-1px);
+    }
+
+    button:disabled,
+    .download-link[aria-disabled="true"] {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .tips {
+      margin: 18px 0 0;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.66);
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .preview {
+      padding: 20px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .preview-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+      flex-wrap: wrap;
+    }
+
+    .preview-top p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .canvas-frame {
+      position: relative;
+      border-radius: calc(var(--radius) - 8px);
+      overflow: hidden;
+      background: linear-gradient(135deg, #f6dfcf 0%, #fef8f1 50%, #e7c5ae 100%);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.36);
+      aspect-ratio: 1200 / 630;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .placeholder {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 32px;
+      text-align: center;
+      color: rgba(47, 39, 33, 0.58);
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 2vw, 1.8rem);
+      line-height: 1.5;
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.85), transparent 35%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.06));
+      transition: opacity 0.2s ease;
+    }
+
+    .preview.has-image .placeholder {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .status {
+      min-height: 1.4em;
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.68);
+      border: 1px solid rgba(109, 80, 60, 0.1);
+    }
+
+    @media (max-width: 920px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .controls {
+        position: static;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        width: min(100% - 20px, 1120px);
+        padding-top: 20px;
+        padding-bottom: 28px;
+      }
+
+      .controls,
+      .preview {
+        padding: 18px;
+      }
+
+      textarea {
+        min-height: 240px;
+      }
+
+      .toolbar {
+        flex-direction: column;
+      }
+
+      button,
+      .download-link {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <p class="eyebrow">Single File Tool</p>
+      <h1>Ameblo Image Generator</h1>
+      <p>記事本文からテーマを読み取り、アメブロ掲載向けの 1200×630px イラスト画像をその場で生成します。文字を大きく載せるのではなく、内容に合うモチーフと配色でビジュアル化します。</p>
+    </section>
+
+    <section class="layout">
+      <div class="panel controls">
+        <h2 class="panel-title">記事本文を入力</h2>
+        <p class="panel-copy">本文を貼り付けて「画像生成」を押すと、記事内容に合わせたイラスト風ビジュアルを自動作成します。健康、美容、仕事、暮らしなどの話題ごとにモチーフを切り替えます。</p>
+
+        <label for="articleText">本文テキスト</label>
+        <textarea id="articleText" placeholder="例）新しい季節に向けて、暮らしを軽やかに整える3つの習慣を紹介します。忙しい毎日でも取り入れやすい小さな工夫をまとめました。">読者の心に残る記事タイトルやリード文をここに入力してください。ブログのテーマ、伝えたいメッセージ、印象づけたいフレーズを含めると、画像にしたときも見やすく整います。</textarea>
+
+        <div class="toolbar">
+          <button id="generateButton" class="primary" type="button">画像生成</button>
+          <a id="downloadLink" class="download-link secondary" href="#" download="ameblo-image.png" aria-disabled="true">画像をダウンロード</a>
+        </div>
+
+        <p class="status" id="statusMessage">本文を調整したらイラスト画像を生成できます。</p>
+
+        <div class="tips">
+          生成画像では本文から話題を推定し、配色とモチーフを切り替えます。大きな文字画像ではなく、サムネイル向けのイラスト表現に寄せています。
+        </div>
+      </div>
+
+      <div class="panel preview" id="previewPanel">
+        <div class="preview-top">
+          <div>
+            <h2 class="panel-title">プレビュー</h2>
+            <p>1200×630px / PNG ダウンロード対応</p>
+          </div>
+        </div>
+
+        <div class="canvas-frame">
+          <canvas id="previewCanvas" width="1200" height="630" aria-label="生成画像プレビュー"></canvas>
+          <div class="placeholder">Ameblo article image preview</div>
+        </div>
+
+        <div class="meta">
+          <span class="pill">本文テーマからイラスト化</span>
+          <span class="pill">シンプルなグラデーション背景</span>
+          <span class="pill">モバイル対応UI</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const canvas = document.getElementById("previewCanvas");
+    const ctx = canvas.getContext("2d");
+    const articleText = document.getElementById("articleText");
+    const generateButton = document.getElementById("generateButton");
+    const downloadLink = document.getElementById("downloadLink");
+    const statusMessage = document.getElementById("statusMessage");
+    const previewPanel = document.getElementById("previewPanel");
+
+    function normalizeText(text) {
+      return text
+        .replace(/\r\n/g, "\n")
+        .replace(/\n{3,}/g, "\n\n")
+        .replace(/[ \t]{2,}/g, " ")
+        .trim();
+    }
+
+    function pickTheme(text) {
+      const normalized = normalizeText(text).toLowerCase();
+      const themes = [
+        {
+          name: "health",
+          label: "HEALTH ESSENCE",
+          keywords: ["健康", "体", "筋トレ", "ジム", "代謝", "栄養", "睡眠", "プロテイン", "食事", "疲れ", "美容", "diet", "health", "body"],
+          colors: ["#d7f0e2", "#f5fff8", "#a8d8b9"],
+          accent: "#3f7c63"
+        },
+        {
+          name: "business",
+          label: "WORK & MINDSET",
+          keywords: ["仕事", "習慣", "収入", "副業", "時間", "戦略", "行動", "成果", "ビジネス", "マーケティング", "business", "work"],
+          colors: ["#d8e7fb", "#f8fbff", "#b8cae9"],
+          accent: "#395a92"
+        },
+        {
+          name: "beauty",
+          label: "BEAUTY CARE",
+          keywords: ["美容", "肌", "スキンケア", "メイク", "女性", "きれい", "エステ", "コスメ", "beauty", "skin"],
+          colors: ["#fde0e8", "#fff7fa", "#f3c3d0"],
+          accent: "#b75b7b"
+        },
+        {
+          name: "lifestyle",
+          label: "LIFESTYLE NOTES",
+          keywords: ["暮らし", "生活", "家", "整理", "片付け", "日常", "子育て", "料理", "習慣", "life", "home"],
+          colors: ["#f8e7c8", "#fffaf1", "#edc98f"],
+          accent: "#9f6c2d"
+        }
+      ];
+
+      let bestTheme = themes[themes.length - 1];
+      let bestScore = 0;
+
+      themes.forEach((theme) => {
+        const score = theme.keywords.reduce((total, keyword) => total + (normalized.includes(keyword) ? 1 : 0), 0);
+        if (score > bestScore) {
+          bestScore = score;
+          bestTheme = theme;
+        }
+      });
+
+      return bestTheme;
+    }
+
+    function extractKeyword(text) {
+      const normalized = normalizeText(text);
+      const pieces = normalized
+        .split(/[。！!？?\n、,]/)
+        .map((piece) => piece.trim())
+        .filter(Boolean);
+
+      const candidate = pieces.find((piece) => piece.length >= 6) || pieces[0] || "Article Illustration";
+      return candidate.length > 24 ? `${candidate.slice(0, 24).trim()}...` : candidate;
+    }
+
+    function drawBackground(theme) {
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      gradient.addColorStop(0, theme.colors[0]);
+      gradient.addColorStop(0.48, theme.colors[1]);
+      gradient.addColorStop(1, theme.colors[2]);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const glowA = ctx.createRadialGradient(200, 120, 10, 200, 120, 420);
+      glowA.addColorStop(0, "rgba(255,255,255,0.9)");
+      glowA.addColorStop(1, "rgba(255,255,255,0)");
+      ctx.fillStyle = glowA;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const glowB = ctx.createRadialGradient(980, 520, 30, 980, 520, 360);
+      glowB.addColorStop(0, `${theme.accent}33`);
+      glowB.addColorStop(1, `${theme.accent}00`);
+      ctx.fillStyle = glowB;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.strokeStyle = "rgba(255,255,255,0.45)";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(26, 26, canvas.width - 52, canvas.height - 52);
+    }
+
+    function drawBlob(x, y, radius, color, alpha) {
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawHealthIllustration(theme) {
+      drawBlob(310, 180, 130, "#ffffff", 0.55);
+      drawBlob(940, 430, 160, theme.accent, 0.12);
+
+      ctx.save();
+      ctx.translate(600, 325);
+      ctx.strokeStyle = theme.accent;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      ctx.lineWidth = 18;
+      ctx.beginPath();
+      ctx.moveTo(-150, 30);
+      ctx.quadraticCurveTo(-50, -90, 0, -120);
+      ctx.quadraticCurveTo(90, -170, 155, -10);
+      ctx.stroke();
+
+      ctx.lineWidth = 14;
+      ctx.beginPath();
+      ctx.moveTo(-30, -150);
+      ctx.quadraticCurveTo(-80, -40, -115, 50);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(35, -125);
+      ctx.quadraticCurveTo(120, -15, 135, 95);
+      ctx.stroke();
+
+      ctx.fillStyle = `${theme.accent}22`;
+      ctx.beginPath();
+      ctx.arc(0, 20, 165, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawBusinessIllustration(theme) {
+      drawBlob(280, 160, 140, "#ffffff", 0.6);
+      drawBlob(970, 470, 150, theme.accent, 0.12);
+
+      ctx.save();
+      ctx.translate(600, 315);
+
+      ctx.fillStyle = `${theme.accent}18`;
+      for (let i = 0; i < 4; i += 1) {
+        ctx.fillRect(-250 + i * 115, 40 - i * 35, 72, 200 + i * 35);
+      }
+
+      ctx.strokeStyle = theme.accent;
+      ctx.lineWidth = 16;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(-260, 135);
+      ctx.lineTo(-110, 70);
+      ctx.lineTo(10, 15);
+      ctx.lineTo(150, -65);
+      ctx.lineTo(260, -155);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(200, -160);
+      ctx.lineTo(260, -155);
+      ctx.lineTo(255, -95);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawBeautyIllustration(theme) {
+      drawBlob(320, 185, 145, "#ffffff", 0.58);
+      drawBlob(920, 465, 165, theme.accent, 0.1);
+
+      ctx.save();
+      ctx.translate(610, 320);
+      ctx.strokeStyle = theme.accent;
+      ctx.lineWidth = 12;
+
+      ctx.beginPath();
+      ctx.moveTo(-90, -60);
+      ctx.bezierCurveTo(-145, -170, -25, -190, 0, -70);
+      ctx.bezierCurveTo(30, -190, 145, -165, 92, -60);
+      ctx.stroke();
+
+      ctx.fillStyle = `${theme.accent}22`;
+      ctx.beginPath();
+      ctx.moveTo(-115, 140);
+      ctx.quadraticCurveTo(-70, 15, 0, -10);
+      ctx.quadraticCurveTo(75, 20, 118, 140);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(0, -10, 72, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawLifestyleIllustration(theme) {
+      drawBlob(305, 180, 135, "#ffffff", 0.55);
+      drawBlob(955, 455, 170, theme.accent, 0.11);
+
+      ctx.save();
+      ctx.translate(600, 320);
+      ctx.fillStyle = `${theme.accent}20`;
+      ctx.strokeStyle = theme.accent;
+      ctx.lineWidth = 12;
+      ctx.lineJoin = "round";
+
+      ctx.beginPath();
+      ctx.moveTo(-170, 45);
+      ctx.lineTo(0, -105);
+      ctx.lineTo(170, 45);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.rect(-120, 45, 240, 150);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.rect(-28, 105, 56, 90);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(-65, 103, 18, 0, Math.PI * 2);
+      ctx.arc(65, 103, 18, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawThemeIllustration(theme) {
+      if (theme.name === "health") {
+        drawHealthIllustration(theme);
+        return;
+      }
+      if (theme.name === "business") {
+        drawBusinessIllustration(theme);
+        return;
+      }
+      if (theme.name === "beauty") {
+        drawBeautyIllustration(theme);
+        return;
+      }
+      drawLifestyleIllustration(theme);
+    }
+
+    function drawLabel(theme, keyword) {
+      ctx.save();
+      ctx.fillStyle = "rgba(255,255,255,0.72)";
+      ctx.beginPath();
+      ctx.roundRect(88, 70, 350, 92, 28);
+      ctx.fill();
+
+      ctx.fillStyle = theme.accent;
+      ctx.font = '700 24px "Avenir Next", "Hiragino Sans", sans-serif';
+      ctx.fillText(theme.label, 122, 110);
+
+      ctx.fillStyle = "#352820";
+      ctx.font = '700 36px "Hiragino Sans", "Yu Gothic", sans-serif';
+      ctx.fillText(keyword, 122, 145);
+      ctx.restore();
+
+      ctx.font = '600 24px "Avenir Next", "Hiragino Sans", sans-serif';
+      ctx.fillStyle = "rgba(53, 40, 32, 0.58)";
+      ctx.textAlign = "center";
+      ctx.fillText("Ameblo Image Generator", canvas.width / 2, canvas.height - 58);
+    }
+
+    function renderImage() {
+      const sourceText = articleText.value;
+      const normalized = normalizeText(sourceText);
+
+      if (!normalized) {
+        statusMessage.textContent = "本文を入力するとイラスト画像を生成できます。";
+        downloadLink.setAttribute("aria-disabled", "true");
+        downloadLink.removeAttribute("href");
+        previewPanel.classList.remove("has-image");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        return;
+      }
+
+      const theme = pickTheme(normalized);
+      const keyword = extractKeyword(normalized);
+
+      drawBackground(theme);
+      drawThemeIllustration(theme);
+      drawLabel(theme, keyword);
+
+      const dataUrl = canvas.toDataURL("image/png");
+      downloadLink.href = dataUrl;
+      downloadLink.download = "ameblo-image.png";
+      downloadLink.setAttribute("aria-disabled", "false");
+      previewPanel.classList.add("has-image");
+      statusMessage.textContent = "イラスト画像を生成しました。プレビュー確認後、そのままダウンロードできます。";
+    }
+
+    generateButton.addEventListener("click", renderImage);
+    articleText.addEventListener("input", () => {
+      statusMessage.textContent = normalizeText(articleText.value)
+        ? "本文が更新されました。必要に応じて再生成してください。"
+        : "本文を入力するとイラスト画像を生成できます。";
+    });
+
+    renderImage();
+  </script>
+</body>
+</html>
