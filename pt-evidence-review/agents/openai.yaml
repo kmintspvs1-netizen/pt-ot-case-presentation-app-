@@ -1,0 +1,4 @@
+interface:
+  display_name: "PT Evidence Review"
+  short_description: "Review PT evidence for clinical use"
+  default_prompt: "Use $pt-evidence-review to turn a physical therapy clinical question or paper into PICO, search terms, critical appraisal, and clinical application in Japanese."

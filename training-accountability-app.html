@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Training Accountability App</title>
+  <style>
+    :root {
+      --bg-top: #f7f0e8;
+      --bg-bottom: #eef3ec;
+      --panel: rgba(255, 253, 249, 0.88);
+      --panel-strong: rgba(255, 255, 255, 0.95);
+      --ink: #1d2320;
+      --muted: #5f6761;
+      --line: rgba(58, 74, 66, 0.12);
+      --accent: #cf6f3f;
+      --accent-deep: #974525;
+      --accent-soft: rgba(207, 111, 63, 0.14);
+      --support: #2f6d5c;
+      --support-soft: rgba(47, 109, 92, 0.12);
+      --danger: #a34933;
+      --shadow: 0 24px 56px rgba(45, 54, 49, 0.12);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(207, 111, 63, 0.18), transparent 26%),
+        radial-gradient(circle at top right, rgba(47, 109, 92, 0.12), transparent 30%),
+        linear-gradient(160deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+    }
+
+    .shell {
+      width: min(1320px, calc(100% - 28px));
+      margin: 24px auto 40px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 32px;
+      border: 1px solid rgba(89, 81, 72, 0.1);
+      border-radius: calc(var(--radius-xl) + 4px);
+      background:
+        linear-gradient(135deg, rgba(255, 250, 243, 0.94), rgba(247, 241, 231, 0.92)),
+        var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -50px -60px auto;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(47, 109, 92, 0.18), transparent 68%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--support-soft);
+      color: var(--support);
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+      font-size: clamp(2.1rem, 4vw, 4.2rem);
+      line-height: 1.03;
+      letter-spacing: 0.02em;
+    }
+
+    .hero p {
+      max-width: 860px;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .stat {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(89, 81, 72, 0.08);
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .stat-value {
+      margin-top: 6px;
+      font-size: clamp(1.2rem, 2vw, 2rem);
+      font-weight: 800;
+      letter-spacing: 0.01em;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 20px;
+      align-content: start;
+    }
+
+    .card {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .panel {
+      padding: 22px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .section-head h2,
+    .section-head h3 {
+      margin: 0;
+      font-size: 1.08rem;
+    }
+
+    .section-note {
+      margin: 0 0 16px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .field-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .field-grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    label {
+      display: grid;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(91, 100, 94, 0.18);
+      border-radius: 14px;
+      background: var(--panel-strong);
+      color: var(--ink);
+      padding: 13px 14px;
+      font: inherit;
+      transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: rgba(207, 111, 63, 0.5);
+      box-shadow: 0 0 0 4px rgba(207, 111, 63, 0.12);
+      transform: translateY(-1px);
+    }
+
+    textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      min-height: 46px;
+      padding: 0 18px;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    button.primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+      box-shadow: 0 14px 28px rgba(151, 69, 37, 0.22);
+    }
+
+    button.secondary {
+      color: var(--support);
+      background: rgba(47, 109, 92, 0.1);
+    }
+
+    button.ghost {
+      color: var(--ink);
+      background: rgba(29, 35, 32, 0.06);
+    }
+
+    .plan-box {
+      padding: 16px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(47, 109, 92, 0.09), rgba(207, 111, 63, 0.08));
+      border: 1px dashed rgba(47, 109, 92, 0.2);
+    }
+
+    .plan-preview {
+      margin: 0;
+      font-weight: 800;
+      line-height: 1.8;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(207, 111, 63, 0.1);
+      color: var(--accent-deep);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .board {
+      display: grid;
+      gap: 16px;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .board-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .week-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+      border: 1px solid rgba(85, 95, 88, 0.12);
+      background: rgba(255, 255, 255, 0.82);
+      min-height: 100%;
+    }
+
+    .week-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 5px;
+      background: linear-gradient(180deg, rgba(47, 109, 92, 0.2), rgba(207, 111, 63, 0.45));
+    }
+
+    .week-card.done::before {
+      background: linear-gradient(180deg, rgba(47, 109, 92, 0.5), rgba(47, 109, 92, 0.85));
+    }
+
+    .week-card.missed::before {
+      background: linear-gradient(180deg, rgba(163, 73, 51, 0.4), rgba(163, 73, 51, 0.85));
+    }
+
+    .week-inner {
+      padding: 18px 18px 16px 20px;
+    }
+
+    .week-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .week-title {
+      margin: 0;
+      font-size: 1.08rem;
+    }
+
+    .week-status {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      background: rgba(29, 35, 32, 0.06);
+      color: var(--muted);
+    }
+
+    .week-card.done .week-status {
+      background: rgba(47, 109, 92, 0.12);
+      color: var(--support);
+    }
+
+    .week-card.missed .week-status {
+      background: rgba(163, 73, 51, 0.12);
+      color: var(--danger);
+    }
+
+    .week-copy {
+      margin: 0 0 14px;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 0.92rem;
+    }
+
+    .mini-progress {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(29, 35, 32, 0.08);
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .mini-progress > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(135deg, var(--support), var(--accent));
+    }
+
+    .week-meta {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .penalty-box {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(163, 73, 51, 0.08);
+      color: #7d3425;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .partner-box {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(47, 109, 92, 0.08);
+      color: #235345;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .empty {
+      padding: 20px;
+      border-radius: 18px;
+      border: 1px dashed rgba(91, 100, 94, 0.24);
+      color: var(--muted);
+      text-align: center;
+      background: rgba(255, 255, 255, 0.48);
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 1040px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .shell {
+        width: min(100%, calc(100% - 18px));
+      }
+
+      .hero,
+      .panel {
+        padding: 18px;
+      }
+
+      .summary-row,
+      .field-grid.two {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar {
+        align-items: stretch;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <span class="eyebrow">Training Accountability</span>
+      <h1>続ける仕組みまで設計する<br>トレーニング習慣化アプリ</h1>
+      <p>週数と週あたりの目標回数を決めて、毎週の実施回数や運動内容を記録できます。さらに、if-then プランで行動のきっかけを言語化し、確認相手と未達時の罰ゲームまでセットにして、習慣化を仕組みで支える構成にしています。</p>
+      <div class="summary-row" id="summaryRow"></div>
+    </section>
+
+    <section class="layout">
+      <div class="stack">
+        <article class="card panel">
+          <div class="section-head">
+            <h2>基本設定</h2>
+          </div>
+          <p class="section-note">32週間、週4回のようなプランを自由に変更できます。内容はこのブラウザに保存されます。</p>
+          <div class="field-grid two">
+            <label>
+              プラン名
+              <input id="programTitle" type="text" placeholder="例: 32週間 筋力アップ計画">
+            </label>
+            <label>
+              開始日
+              <input id="startDate" type="date">
+            </label>
+            <label>
+              総週数
+              <input id="totalWeeks" type="number" min="1" max="104" step="1">
+            </label>
+            <label>
+              週あたり目標回数
+              <input id="sessionsPerWeek" type="number" min="1" max="14" step="1">
+            </label>
+          </div>
+          <div class="button-row">
+            <button class="primary" id="saveSettingsButton">設定を保存</button>
+            <button class="ghost" id="resetDataButton" type="button">記録を初期化</button>
+          </div>
+        </article>
+
+        <article class="card panel">
+          <div class="section-head">
+            <h2>習慣化のコツ</h2>
+          </div>
+          <p class="section-note">if-then プランは、行動のきっかけを先に決めておく方法です。「もし X なら、その時 Y をする」と書くと、始める負荷がぐっと下がります。</p>
+          <div class="field-grid">
+            <label>
+              If: どんな状況になったら？
+              <input id="ifTrigger" type="text" placeholder="例: 仕事から帰って20分たったら">
+            </label>
+            <label>
+              Then: その時に何をする？
+              <input id="thenAction" type="text" placeholder="例: 着替えて自重トレーニングを20分する">
+            </label>
+          </div>
+          <div class="button-row">
+            <button class="secondary" id="saveHabitButton">if-then を保存</button>
+          </div>
+          <div class="plan-box" style="margin-top: 16px;">
+            <p class="plan-preview" id="planPreview"></p>
+          </div>
+          <div class="pill-row">
+            <span class="pill">例: もし朝のコーヒーを入れたら、10分ストレッチする</span>
+            <span class="pill">例: もし会議が終わったら、帰宅前にジムへ向かう</span>
+          </div>
+        </article>
+
+        <article class="card panel">
+          <div class="section-head">
+            <h2>確認相手と約束</h2>
+          </div>
+          <p class="section-note">ひとりで続けにくい時は、確認してくれる相手を決めておくと行動が安定しやすくなります。未達時の罰ゲームも先に決めておくと、曖昧になりません。</p>
+          <div class="field-grid">
+            <label>
+              確認してくれる相手
+              <input id="partnerName" type="text" placeholder="例: 友人の田中さん">
+            </label>
+            <label>
+              連絡方法やルール
+              <input id="partnerRule" type="text" placeholder="例: 毎週日曜の夜にLINEで報告">
+            </label>
+            <label>
+              未達時の罰ゲーム
+              <textarea id="penalty" placeholder="例: 翌週までに相手へコーヒーをおごる / 休日に30分の追加有酸素を入れる"></textarea>
+            </label>
+          </div>
+          <div class="button-row">
+            <button class="secondary" id="saveAccountabilityButton">約束を保存</button>
+            <button class="ghost" id="copySummaryButton" type="button">共有用テキストを作る</button>
+          </div>
+          <p class="footer-note" id="shareSummary"></p>
+        </article>
+      </div>
+
+      <article class="card panel">
+        <div class="toolbar">
+          <div>
+            <div class="section-head" style="margin-bottom: 6px;">
+              <h2>週ごとの報告ボード</h2>
+            </div>
+            <p class="section-note" style="margin: 0;">週に何回できたかと運動内容を記録し、確認済みかどうかまで残せます。</p>
+          </div>
+          <div class="button-row" style="margin-top: 0;">
+            <button class="ghost" id="jumpCurrentWeekButton" type="button">今週へ移動</button>
+          </div>
+        </div>
+        <div class="board" id="weeklyBoard"></div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "training-accountability-app-v1";
+    const defaults = {
+      programTitle: "32週間 トレーニング習慣化プラン",
+      startDate: todayLocal(),
+      totalWeeks: 32,
+      sessionsPerWeek: 4,
+      ifTrigger: "",
+      thenAction: "",
+      partnerName: "",
+      partnerRule: "",
+      penalty: "",
+      weeks: {}
+    };
+
+    const state = loadState();
+
+    const elements = {
+      summaryRow: document.getElementById("summaryRow"),
+      programTitle: document.getElementById("programTitle"),
+      startDate: document.getElementById("startDate"),
+      totalWeeks: document.getElementById("totalWeeks"),
+      sessionsPerWeek: document.getElementById("sessionsPerWeek"),
+      ifTrigger: document.getElementById("ifTrigger"),
+      thenAction: document.getElementById("thenAction"),
+      partnerName: document.getElementById("partnerName"),
+      partnerRule: document.getElementById("partnerRule"),
+      penalty: document.getElementById("penalty"),
+      planPreview: document.getElementById("planPreview"),
+      weeklyBoard: document.getElementById("weeklyBoard"),
+      shareSummary: document.getElementById("shareSummary"),
+      saveSettingsButton: document.getElementById("saveSettingsButton"),
+      saveHabitButton: document.getElementById("saveHabitButton"),
+      saveAccountabilityButton: document.getElementById("saveAccountabilityButton"),
+      copySummaryButton: document.getElementById("copySummaryButton"),
+      resetDataButton: document.getElementById("resetDataButton"),
+      jumpCurrentWeekButton: document.getElementById("jumpCurrentWeekButton")
+    };
+
+    hydrateForm();
+    render();
+
+    elements.saveSettingsButton.addEventListener("click", () => {
+      state.programTitle = sanitizeText(elements.programTitle.value, defaults.programTitle);
+      state.startDate = elements.startDate.value || todayLocal();
+      state.totalWeeks = clampNumber(elements.totalWeeks.value, 1, 104, defaults.totalWeeks);
+      state.sessionsPerWeek = clampNumber(elements.sessionsPerWeek.value, 1, 14, defaults.sessionsPerWeek);
+      trimWeeksToProgram();
+      persistAndRender();
+    });
+
+    elements.saveHabitButton.addEventListener("click", () => {
+      state.ifTrigger = elements.ifTrigger.value.trim();
+      state.thenAction = elements.thenAction.value.trim();
+      persistAndRender();
+    });
+
+    elements.saveAccountabilityButton.addEventListener("click", () => {
+      state.partnerName = elements.partnerName.value.trim();
+      state.partnerRule = elements.partnerRule.value.trim();
+      state.penalty = elements.penalty.value.trim();
+      persistAndRender();
+    });
+
+    elements.copySummaryButton.addEventListener("click", async () => {
+      const summary = buildShareSummary();
+      elements.shareSummary.textContent = summary;
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(summary);
+          elements.shareSummary.textContent = "共有用テキストをコピーしました: " + summary;
+          return;
+        } catch (error) {
+          elements.shareSummary.textContent = "共有用テキスト: " + summary;
+          return;
+        }
+      }
+      elements.shareSummary.textContent = "共有用テキスト: " + summary;
+    });
+
+    elements.resetDataButton.addEventListener("click", () => {
+      const confirmed = window.confirm("設定と週次記録を初期化しますか？");
+      if (!confirmed) {
+        return;
+      }
+      Object.assign(state, cloneDefaults());
+      persistAndRender();
+      hydrateForm();
+    });
+
+    elements.jumpCurrentWeekButton.addEventListener("click", () => {
+      const currentWeek = getCurrentWeekIndex();
+      const card = document.getElementById("week-card-" + currentWeek);
+      if (card) {
+        card.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    });
+
+    function render() {
+      renderSummary();
+      renderPlanPreview();
+      renderWeeklyBoard();
+      renderShareSummary();
+      hydrateForm();
+    }
+
+    function renderSummary() {
+      const weeks = getWeeksArray();
+      const completedWeeks = weeks.filter((week) => week.sessions >= state.sessionsPerWeek).length;
+      const totalSessions = weeks.reduce((sum, week) => sum + week.sessions, 0);
+      const confirmedWeeks = weeks.filter((week) => week.confirmed).length;
+      const currentWeek = getCurrentWeekIndex();
+      const currentLabel = currentWeek > state.totalWeeks ? "完了後" : "Week " + currentWeek;
+
+      elements.summaryRow.innerHTML = [
+        statCard("プラン", state.programTitle),
+        statCard("現在位置", currentLabel),
+        statCard("達成週", completedWeeks + " / " + state.totalWeeks),
+        statCard("総トレーニング回数", String(totalSessions)),
+        statCard("確認済み週", String(confirmedWeeks)),
+        statCard("目標", "週" + state.sessionsPerWeek + "回"),
+        statCard("開始日", formatDate(state.startDate)),
+        statCard("確認相手", state.partnerName || "未設定")
+      ].join("");
+    }
+
+    function renderPlanPreview() {
+      if (state.ifTrigger && state.thenAction) {
+        elements.planPreview.textContent = "もし「" + state.ifTrigger + "」なら、その時「" + state.thenAction + "」をする。";
+        return;
+      }
+      elements.planPreview.textContent = "まだ if-then プランが未設定です。始めるきっかけを先に決めておくと、習慣化しやすくなります。";
+    }
+
+    function renderWeeklyBoard() {
+      const weeks = getWeeksArray();
+      if (!weeks.length) {
+        elements.weeklyBoard.innerHTML = '<div class="empty">週次データがまだありません。</div>';
+        return;
+      }
+
+      const cards = weeks.map((week) => renderWeekCard(week)).join("");
+      elements.weeklyBoard.innerHTML = '<div class="board-grid">' + cards + "</div>";
+
+      weeks.forEach((week) => {
+        const sessionInput = document.getElementById("sessions-" + week.index);
+        const workoutInput = document.getElementById("workout-" + week.index);
+        const memoInput = document.getElementById("memo-" + week.index);
+        const confirmInput = document.getElementById("confirm-" + week.index);
+        const saveButton = document.getElementById("save-week-" + week.index);
+
+        saveButton.addEventListener("click", () => {
+          state.weeks[week.index] = {
+            sessions: clampNumber(sessionInput.value, 0, 30, 0),
+            workout: workoutInput.value.trim(),
+            memo: memoInput.value.trim(),
+            confirmed: confirmInput.checked
+          };
+          persistAndRender();
+        });
+      });
+    }
+
+    function renderWeekCard(week) {
+      const reached = week.sessions >= state.sessionsPerWeek;
+      const missed = !reached && week.index < getCurrentWeekIndex();
+      const status = reached ? "達成" : missed ? "未達" : "進行中";
+      const classes = ["week-card"];
+      if (reached) {
+        classes.push("done");
+      } else if (missed) {
+        classes.push("missed");
+      }
+
+      const progress = Math.min(100, Math.round((week.sessions / Math.max(state.sessionsPerWeek, 1)) * 100));
+      const weekLabel = week.index === getCurrentWeekIndex() ? "今週の記録です" : "週の終わりに報告しても大丈夫です";
+      const penaltyBox = missed && state.penalty
+        ? '<div class="penalty-box"><strong>罰ゲーム:</strong> ' + escapeHtml(state.penalty) + "</div>"
+        : "";
+      const partnerBox = state.partnerName
+        ? '<div class="partner-box"><strong>確認相手:</strong> ' + escapeHtml(state.partnerName) + (state.partnerRule ? " / " + escapeHtml(state.partnerRule) : "") + "</div>"
+        : "";
+
+      return `
+        <section class="${classes.join(" ")}" id="week-card-${week.index}">
+          <div class="week-inner">
+            <div class="week-top">
+              <h3 class="week-title">Week ${week.index}</h3>
+              <span class="week-status">${status}</span>
+            </div>
+            <p class="week-copy">${escapeHtml(weekLabel)}</p>
+            <div class="mini-progress"><span style="width:${progress}%"></span></div>
+            <div class="week-meta">
+              <span>目標 ${state.sessionsPerWeek}回 / 実施 ${week.sessions}回</span>
+              <span>${escapeHtml(dateRangeForWeek(week.index))}</span>
+            </div>
+            <div class="field-grid">
+              <label>
+                何回トレーニングしたか
+                <input id="sessions-${week.index}" type="number" min="0" max="30" step="1" value="${week.sessions}">
+              </label>
+              <label>
+                運動内容
+                <textarea id="workout-${week.index}" placeholder="例: スクワット 3セット、ジョギング20分">${escapeHtml(week.workout)}</textarea>
+              </label>
+              <label>
+                補足メモ
+                <textarea id="memo-${week.index}" placeholder="例: 疲労感、時間帯、気づいたこと">${escapeHtml(week.memo)}</textarea>
+              </label>
+              <label style="display:flex; align-items:center; gap:10px; font-weight:700;">
+                <input id="confirm-${week.index}" type="checkbox" ${week.confirmed ? "checked" : ""} style="width:20px; height:20px;">
+                確認相手に報告して確認済みにする
+              </label>
+            </div>
+            <div class="button-row">
+              <button class="primary" id="save-week-${week.index}" type="button">Week ${week.index} を保存</button>
+            </div>
+            ${partnerBox}
+            ${penaltyBox}
+          </div>
+        </section>
+      `;
+    }
+
+    function renderShareSummary() {
+      elements.shareSummary.textContent = buildShareSummary();
+    }
+
+    function buildShareSummary() {
+      const currentWeek = Math.min(getCurrentWeekIndex(), state.totalWeeks);
+      const current = state.weeks[currentWeek] || { sessions: 0, workout: "", memo: "", confirmed: false };
+      const pieces = [
+        state.programTitle,
+        "Week " + currentWeek + " は " + current.sessions + " / " + state.sessionsPerWeek + " 回",
+        current.workout ? "内容: " + current.workout : "内容はこれから記入",
+        state.partnerName ? "確認相手: " + state.partnerName : "確認相手は未設定",
+        state.penalty ? "未達時: " + state.penalty : "罰ゲームは未設定"
+      ];
+      return pieces.join(" | ");
+    }
+
+    function hydrateForm() {
+      elements.programTitle.value = state.programTitle;
+      elements.startDate.value = state.startDate;
+      elements.totalWeeks.value = state.totalWeeks;
+      elements.sessionsPerWeek.value = state.sessionsPerWeek;
+      elements.ifTrigger.value = state.ifTrigger;
+      elements.thenAction.value = state.thenAction;
+      elements.partnerName.value = state.partnerName;
+      elements.partnerRule.value = state.partnerRule;
+      elements.penalty.value = state.penalty;
+    }
+
+    function getWeeksArray() {
+      const result = [];
+      for (let index = 1; index <= state.totalWeeks; index += 1) {
+        const saved = state.weeks[index] || {};
+        result.push({
+          index,
+          sessions: Number.isFinite(saved.sessions) ? saved.sessions : 0,
+          workout: saved.workout || "",
+          memo: saved.memo || "",
+          confirmed: Boolean(saved.confirmed)
+        });
+      }
+      return result;
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          return cloneDefaults();
+        }
+        const parsed = JSON.parse(raw);
+        return {
+          ...cloneDefaults(),
+          ...parsed,
+          weeks: parsed.weeks && typeof parsed.weeks === "object" ? parsed.weeks : {}
+        };
+      } catch (error) {
+        return cloneDefaults();
+      }
+    }
+
+    function persistAndRender() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      render();
+    }
+
+    function trimWeeksToProgram() {
+      Object.keys(state.weeks).forEach((key) => {
+        if (Number(key) > state.totalWeeks) {
+          delete state.weeks[key];
+        }
+      });
+    }
+
+    function getCurrentWeekIndex() {
+      const start = parseLocalDate(state.startDate);
+      const now = new Date();
+      const diff = now.getTime() - start.getTime();
+      if (diff < 0) {
+        return 1;
+      }
+      return Math.min(state.totalWeeks + 1, Math.floor(diff / (1000 * 60 * 60 * 24 * 7)) + 1);
+    }
+
+    function dateRangeForWeek(index) {
+      const start = parseLocalDate(state.startDate);
+      const weekStart = new Date(start);
+      weekStart.setDate(start.getDate() + (index - 1) * 7);
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekStart.getDate() + 6);
+      return formatDate(weekStart) + " - " + formatDate(weekEnd);
+    }
+
+    function statCard(label, value) {
+      return '<div class="stat"><div class="stat-label">' + escapeHtml(label) + '</div><div class="stat-value">' + escapeHtml(value) + "</div></div>";
+    }
+
+    function sanitizeText(value, fallback) {
+      const trimmed = String(value || "").trim();
+      return trimmed || fallback;
+    }
+
+    function cloneDefaults() {
+      if (typeof structuredClone === "function") {
+        return structuredClone(defaults);
+      }
+      return JSON.parse(JSON.stringify(defaults));
+    }
+
+    function clampNumber(value, min, max, fallback) {
+      const parsed = Number.parseInt(value, 10);
+      if (Number.isNaN(parsed)) {
+        return fallback;
+      }
+      return Math.max(min, Math.min(max, parsed));
+    }
+
+    function todayLocal() {
+      const now = new Date();
+      const offset = now.getTimezoneOffset();
+      const local = new Date(now.getTime() - offset * 60000);
+      return local.toISOString().slice(0, 10);
+    }
+
+    function parseLocalDate(value) {
+      if (!value) {
+        return new Date();
+      }
+      const [year, month, day] = value.split("-").map(Number);
+      return new Date(year, month - 1, day);
+    }
+
+    function formatDate(value) {
+      const date = typeof value === "string" ? parseLocalDate(value) : value;
+      return new Intl.DateTimeFormat("ja-JP", {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+      }).format(date);
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+  </script>
+</body>
+</html>
