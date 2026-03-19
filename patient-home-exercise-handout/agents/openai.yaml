@@ -1,0 +1,7 @@
+interface:
+  display_name: "患者自主トレ作成"
+  short_description: "画像つきの患者向け自主トレ用紙を作成"
+  default_prompt: "Use $patient-home-exercise-handout to turn these clinical findings into a patient-friendly home exercise handout with images, dosage, precautions, and simple Japanese wording."
+
+policy:
+  allow_implicit_invocation: true

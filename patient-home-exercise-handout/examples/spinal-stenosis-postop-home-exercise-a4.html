@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>脊柱管狭窄症術後 自主トレ用紙</title>
+    <style>
+      :root {
+        --paper: #fffefa;
+        --ink: #22313a;
+        --sub: #5d6e74;
+        --accent: #1f7a68;
+        --accent-soft: #deefe9;
+        --accent-deep: #185f52;
+        --line: #d8e0db;
+        --card-shadow: rgba(34, 49, 58, 0.05);
+        --warn: #9f4d44;
+        --warn-soft: #fff4f1;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 10mm;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at top right, #edf7f3, transparent 30%),
+          linear-gradient(180deg, #f5f7f4 0%, #edf2ee 100%);
+      }
+
+      .sheet {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0 auto;
+        padding: 10mm;
+        background: var(--paper);
+        position: relative;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.45fr 0.9fr;
+        gap: 10px;
+        align-items: stretch;
+      }
+
+      .title-block {
+        padding: 16px 18px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, var(--accent) 0%, #31977f 100%);
+        color: #fff;
+        box-shadow: 0 10px 24px rgba(31, 122, 104, 0.18);
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      .title-block p {
+        margin-top: 8px;
+        line-height: 1.6;
+        font-size: 13px;
+      }
+
+      .info {
+        padding: 14px 16px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: #f8fbf9;
+        box-shadow: 0 8px 18px var(--card-shadow);
+      }
+
+      .label {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+      }
+
+      .info ul,
+      .alert ul,
+      .card ul {
+        margin: 8px 0 0;
+        padding-left: 18px;
+      }
+
+      .info li,
+      .alert li,
+      .card li {
+        margin-top: 4px;
+        line-height: 1.5;
+        font-size: 12px;
+      }
+
+      .section-title {
+        margin-top: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .section-title h2 {
+        font-size: 17px;
+      }
+
+      .cards {
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .card {
+        padding: 12px;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        background: #fff;
+        break-inside: avoid;
+        box-shadow: 0 8px 16px var(--card-shadow);
+      }
+
+      .card h3 {
+        font-size: 15px;
+      }
+
+      .card-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .tag {
+        flex-shrink: 0;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: #eef6f3;
+        color: var(--accent-deep);
+        font-size: 10px;
+        font-weight: 700;
+      }
+
+      .purpose {
+        margin-top: 4px;
+        color: var(--sub);
+        font-size: 11px;
+        line-height: 1.5;
+      }
+
+      .figure {
+        margin-top: 10px;
+        height: 124px;
+        display: grid;
+        place-items: center;
+        border-radius: 14px;
+        background:
+          linear-gradient(180deg, #edf7f3 0%, #deefe9 100%);
+        overflow: hidden;
+        border: 1px solid #d3e4dd;
+      }
+
+      .figure svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .alert {
+        margin-top: 10px;
+        padding: 14px 16px;
+        border-radius: 18px;
+        border: 1px solid #ebcbc4;
+        background: var(--warn-soft);
+        box-shadow: 0 8px 18px rgba(159, 77, 68, 0.07);
+      }
+
+      .alert h2 {
+        color: var(--warn);
+        font-size: 17px;
+      }
+
+      .footer {
+        margin-top: 8px;
+        color: var(--sub);
+        font-size: 11px;
+        line-height: 1.5;
+      }
+
+      .small {
+        margin-top: 4px;
+        font-size: 11px;
+        color: var(--sub);
+      }
+
+      .sheet::after {
+        content: "Home Exercise Sheet";
+        position: absolute;
+        top: 12mm;
+        right: 10mm;
+        color: rgba(31, 122, 104, 0.08);
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        pointer-events: none;
+      }
+
+      @media print {
+        body {
+          background: #fff;
+        }
+
+        .sheet {
+          margin: 0;
+        }
+
+        .card,
+        .info,
+        .title-block,
+        .alert {
+          box-shadow: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="sheet">
+      <section class="hero">
+        <div class="title-block">
+          <span class="label" style="background: rgba(255,255,255,0.2); color: #fff;">おうちで行う運動</span>
+          <h1 style="margin-top: 10px; font-size: 28px;">体を動かしやすくする自主トレ</h1>
+          <p>
+            体のかたさをやわらげて、歩きやすさを保つための運動です。
+            1日1から2回、全部で10分くらいを目安に、ゆっくり行いましょう。
+          </p>
+        </div>
+        <aside class="info">
+          <span class="label">実施のポイント</span>
+          <ul>
+            <li>息を止めずに行います。</li>
+            <li>痛みがない範囲でゆっくり動きます。</li>
+            <li>立つ運動は机や壁につかまって行います。</li>
+            <li>装具や杖は普段どおり使って大丈夫です。</li>
+          </ul>
+        </aside>
+      </section>
+
+      <div class="section-title">
+        <span class="label">運動メニュー 5 種目</span>
+        <h2>A4 1枚で見る自主トレ</h2>
+      </div>
+
+      <section class="cards">
+        <article class="card">
+          <div class="card-head">
+            <h3>1. おしり上げ</h3>
+            <span class="tag">10回</span>
+          </div>
+          <p class="purpose">おしりと体幹を使いやすくします。</p>
+          <div class="figure">
+            <svg viewBox="0 0 240 124" aria-label="おしり上げの図">
+              <rect x="0" y="92" width="240" height="32" fill="#cfded8" />
+              <circle cx="48" cy="54" r="11" fill="#1f7a68" />
+              <line x1="58" y1="60" x2="92" y2="76" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="92" y1="76" x2="138" y2="72" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="138" y1="72" x2="176" y2="82" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="176" y1="82" x2="204" y2="92" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="126" y1="70" x2="160" y2="42" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <path d="M98 36 Q114 22 132 34" fill="none" stroke="#1f7a68" stroke-width="4" />
+              <polygon points="126,26 136,36 122,38" fill="#1f7a68" />
+            </svg>
+          </div>
+          <ul>
+            <li>あお向けでひざを立てます。</li>
+            <li>おしりを少し持ち上げて戻します。</li>
+            <li>回数: 10回</li>
+            <li>腰を反らせすぎません。</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <h3>2. ひざ抱え</h3>
+            <span class="tag">左右5回</span>
+          </div>
+          <p class="purpose">腰とおしりまわりをやわらかくします。</p>
+          <div class="figure">
+            <svg viewBox="0 0 240 124" aria-label="ひざ抱えの図">
+              <rect x="0" y="92" width="240" height="32" fill="#cfded8" />
+              <circle cx="58" cy="49" r="11" fill="#1f7a68" />
+              <line x1="68" y1="56" x2="104" y2="74" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="104" y1="74" x2="136" y2="62" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="136" y1="62" x2="108" y2="42" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="108" y1="42" x2="84" y2="55" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="104" y1="74" x2="158" y2="86" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <path d="M155 43 Q140 32 126 42" fill="none" stroke="#1f7a68" stroke-width="4" />
+              <polygon points="130,34 118,42 132,46" fill="#1f7a68" />
+            </svg>
+          </div>
+          <ul>
+            <li>あお向けで片ひざを抱えます。</li>
+            <li>胸に近づけてゆっくり戻します。</li>
+            <li>回数: 左右5回ずつ</li>
+            <li>強く引っ張りすぎません。</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <h3>3. 横向き脚上げ</h3>
+            <span class="tag">左右10回</span>
+          </div>
+          <p class="purpose">おしりの横の筋肉を使いやすくします。</p>
+          <div class="figure">
+            <svg viewBox="0 0 240 124" aria-label="横向き脚上げの図">
+              <rect x="0" y="92" width="240" height="32" fill="#cfded8" />
+              <circle cx="58" cy="58" r="11" fill="#1f7a68" />
+              <line x1="68" y1="62" x2="110" y2="74" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="110" y1="74" x2="158" y2="72" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="158" y1="72" x2="202" y2="60" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="110" y1="78" x2="160" y2="88" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="160" y1="88" x2="206" y2="88" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <path d="M182 56 Q190 36 208 38" fill="none" stroke="#1f7a68" stroke-width="4" />
+              <polygon points="200,32 212,40 198,44" fill="#1f7a68" />
+            </svg>
+          </div>
+          <ul>
+            <li>横向きで上の脚を少し上げます。</li>
+            <li>ゆっくり下ろします。</li>
+            <li>回数: 左右10回ずつ</li>
+            <li>右は少ない回数からでも大丈夫です。</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <h3>4. 座ってつま先上げ</h3>
+            <span class="tag">10回 x 2</span>
+          </div>
+          <p class="purpose">右足のつま先を上げる感覚を入れます。</p>
+          <div class="figure">
+            <svg viewBox="0 0 240 124" aria-label="座ってつま先上げの図">
+              <rect x="30" y="88" width="64" height="8" rx="4" fill="#8ca29a" />
+              <rect x="38" y="48" width="10" height="40" fill="#8ca29a" />
+              <rect x="78" y="48" width="10" height="40" fill="#8ca29a" />
+              <circle cx="122" cy="30" r="11" fill="#1f7a68" />
+              <line x1="122" y1="42" x2="122" y2="74" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="122" y1="52" x2="96" y2="64" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="122" y1="52" x2="150" y2="62" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="122" y1="74" x2="102" y2="98" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="122" y1="74" x2="160" y2="90" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="160" y1="90" x2="188" y2="84" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <path d="M180 76 Q194 68 200 78" fill="none" stroke="#1f7a68" stroke-width="4" />
+              <polygon points="194,68 204,78 190,80" fill="#1f7a68" />
+            </svg>
+          </div>
+          <ul>
+            <li>椅子に座ってつま先を上げます。</li>
+            <li>右足を特に意識して行います。</li>
+            <li>回数: 10回を2セット</li>
+            <li>動きにくくても意識するだけで大丈夫です。</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <h3>5. 立って背すじ伸ばし</h3>
+            <span class="tag">10回</span>
+          </div>
+          <p class="purpose">前かがみ姿勢を整えやすくします。</p>
+          <div class="figure">
+            <svg viewBox="0 0 240 124" aria-label="立って背すじ伸ばしの図">
+              <rect x="176" y="18" width="10" height="82" rx="4" fill="#8ca29a" />
+              <rect x="0" y="96" width="240" height="28" fill="#cfded8" />
+              <circle cx="86" cy="30" r="11" fill="#1f7a68" />
+              <line x1="86" y1="42" x2="90" y2="74" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="90" y1="52" x2="122" y2="54" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="122" y1="54" x2="176" y2="52" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="90" y1="74" x2="82" y2="98" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <line x1="90" y1="74" x2="104" y2="98" stroke="#22313a" stroke-width="5.5" stroke-linecap="round" />
+              <path d="M54 68 Q60 48 74 44" fill="none" stroke="#1f7a68" stroke-width="4" />
+              <polygon points="68,38 78,46 66,50" fill="#1f7a68" />
+            </svg>
+          </div>
+          <ul>
+            <li>机や壁に手を添えて立ちます。</li>
+            <li>胸を軽く開いて3秒保ちます。</li>
+            <li>回数: 10回</li>
+            <li>腰を反らしすぎず、ふらつきに注意します。</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <h3>無理をしないことが大切です</h3>
+            <span class="tag">安全確認</span>
+          </div>
+          <p class="purpose">毎日続けやすい強さで行うことが一番大切です。</p>
+          <div class="figure">
+            <svg viewBox="0 0 240 124" aria-label="注意イメージ">
+              <circle cx="70" cy="44" r="14" fill="#1f7a68" />
+              <line x1="70" y1="58" x2="70" y2="92" stroke="#22313a" stroke-width="6" stroke-linecap="round" />
+              <line x1="70" y1="66" x2="48" y2="82" stroke="#22313a" stroke-width="6" stroke-linecap="round" />
+              <line x1="70" y1="66" x2="92" y2="82" stroke="#22313a" stroke-width="6" stroke-linecap="round" />
+              <line x1="70" y1="92" x2="54" y2="112" stroke="#22313a" stroke-width="6" stroke-linecap="round" />
+              <line x1="70" y1="92" x2="86" y2="112" stroke="#22313a" stroke-width="6" stroke-linecap="round" />
+              <circle cx="164" cy="54" r="30" fill="#fff" stroke="#9f4d44" stroke-width="6" />
+              <path d="M148 54 L160 66 L182 42" fill="none" stroke="#9f4d44" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+              <text x="118" y="106" fill="#5d6e74" font-size="13" font-weight="700">少しずつ続けましょう</text>
+            </svg>
+          </div>
+          <ul>
+            <li>強い痛みやしびれの悪化があるときは中止します。</li>
+            <li>右足にさらに力が入りにくいときは相談してください。</li>
+            <li>立つ運動は必ず支えのある場所で行いましょう。</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="alert">
+        <h2>中止・相談の目安</h2>
+        <ul>
+          <li>しびれが強くなる、または右足がさらに上がりにくくなるとき</li>
+          <li>ふらつきが強くて転びそうになるとき</li>
+          <li>腰や脚に強い痛みが出るとき</li>
+        </ul>
+      </section>
+
+      <p class="footer">
+        目安: 1日1から2回。全部で10分程度。
+        できない日があっても大丈夫です。続けやすい回数で、ゆっくり行っていきましょう。
+      </p>
+      <p class="small">対象: 80代男性 / 脊柱管狭窄症術後 約2か月 / 杖歩行・右オルトップ使用</p>
+    </main>
+  </body>
+</html>

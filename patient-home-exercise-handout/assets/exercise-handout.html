@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>自主トレ説明用紙</title>
+    <style>
+      :root {
+        --paper: #fffdf8;
+        --ink: #1f2933;
+        --accent: #1d6f5f;
+        --accent-soft: #d9efe8;
+        --line: #d6ddd8;
+        --warn: #a44a3f;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
+        background:
+          radial-gradient(circle at top right, #e6f3ef, transparent 28%),
+          linear-gradient(180deg, #f5f7f2 0%, #eef3ed 100%);
+        color: var(--ink);
+      }
+
+      .sheet {
+        width: min(920px, calc(100vw - 32px));
+        margin: 24px auto;
+        padding: 32px;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        box-shadow: 0 14px 40px rgba(31, 41, 51, 0.08);
+      }
+
+      .hero {
+        padding: 20px 22px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, var(--accent) 0%, #2c8e7a 100%);
+        color: white;
+      }
+
+      .hero h1,
+      .section h2,
+      .card h3 {
+        margin: 0;
+      }
+
+      .hero p {
+        margin: 10px 0 0;
+        line-height: 1.7;
+      }
+
+      .rules,
+      .alerts {
+        margin-top: 20px;
+        padding: 18px 20px;
+        border-radius: 18px;
+        background: #f8fbf9;
+        border: 1px solid var(--line);
+      }
+
+      .section {
+        margin-top: 24px;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 18px;
+        margin-top: 14px;
+      }
+
+      .card {
+        padding: 18px;
+        border-radius: 20px;
+        border: 1px solid var(--line);
+        background: white;
+      }
+
+      .figure {
+        display: grid;
+        place-items: center;
+        min-height: 180px;
+        margin: 14px 0;
+        border-radius: 16px;
+        background: var(--accent-soft);
+        overflow: hidden;
+      }
+
+      .meta {
+        margin: 10px 0 0;
+        padding-left: 18px;
+      }
+
+      .meta li,
+      .alerts li,
+      .rules li {
+        margin-top: 6px;
+        line-height: 1.6;
+      }
+
+      .label {
+        display: inline-block;
+        margin-bottom: 8px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .alerts {
+        border-color: #efc9c3;
+        background: #fff7f5;
+      }
+
+      .alerts h2 {
+        color: var(--warn);
+      }
+
+      @media print {
+        body {
+          background: white;
+        }
+
+        .sheet {
+          width: 100%;
+          margin: 0;
+          border: 0;
+          box-shadow: none;
+          border-radius: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="sheet">
+      <section class="hero">
+        <h1>おうちで行う自主トレ</h1>
+        <p>
+          立ち座りや歩きやすさにつながるように、毎日続けやすい運動をまとめた用紙です。
+          痛みが強くなるときは無理をせず、担当者へ相談してください。
+        </p>
+      </section>
+
+      <section class="rules">
+        <span class="label">実施ルール</span>
+        <ul>
+          <li>1 日 2 回を目安に行います。</li>
+          <li>息を止めず、ゆっくり動かします。</li>
+          <li>痛みが強くなる場合は回数を減らしてください。</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <span class="label">運動メニュー</span>
+        <div class="cards">
+          <article class="card">
+            <h3>ひざの曲げ伸ばし</h3>
+            <div class="figure">
+              <svg viewBox="0 0 220 180" width="100%" height="100%" aria-label="ひざの曲げ伸ばしの図">
+                <circle cx="72" cy="36" r="14" fill="#1d6f5f" />
+                <line x1="72" y1="50" x2="72" y2="92" stroke="#1f2933" stroke-width="6" stroke-linecap="round" />
+                <line x1="72" y1="64" x2="112" y2="74" stroke="#1f2933" stroke-width="6" stroke-linecap="round" />
+                <line x1="72" y1="92" x2="112" y2="112" stroke="#1f2933" stroke-width="6" stroke-linecap="round" />
+                <line x1="112" y1="112" x2="146" y2="92" stroke="#1f2933" stroke-width="6" stroke-linecap="round" />
+                <path d="M138 88 Q160 82 172 96" fill="none" stroke="#1d6f5f" stroke-width="4" stroke-linecap="round" />
+                <polygon points="170,88 182,98 166,102" fill="#1d6f5f" />
+              </svg>
+            </div>
+            <ul class="meta">
+              <li>開始姿勢: 椅子に浅く座ります。</li>
+              <li>動き方: ひざをゆっくり伸ばして戻します。</li>
+              <li>回数: 10 回 x 2 セット</li>
+              <li>注意点: 反動をつけません。</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>もも上げ</h3>
+            <div class="figure">
+              <svg viewBox="0 0 220 180" width="100%" height="100%" aria-label="もも上げの図">
+                <circle cx="110" cy="34" r="14" fill="#1d6f5f" />
+                <line x1="110" y1="48" x2="110" y2="94" stroke="#1f2933" stroke-width="6" stroke-linecap="round" />
+                <line x1="110" y1="62" x2="78" y2="82" stroke="#1f2933" stroke-width="6" stroke-linecap="round" />
+                <line x1="110" y1="62" x2="140" y2="76" stroke="#1f2933" stroke-width="6" stroke-linecap="round" />
+                <line x1="110" y1="94" x2="86" y2="126" stroke="#1f2933" stroke-width="6" stroke-linecap="round" />
+                <line x1="110" y1="94" x2="142" y2="102" stroke="#1f2933" stroke-width="6" stroke-linecap="round" />
+                <path d="M144 88 Q166 92 170 110" fill="none" stroke="#1d6f5f" stroke-width="4" stroke-linecap="round" />
+                <polygon points="162,104 172,116 156,116" fill="#1d6f5f" />
+              </svg>
+            </div>
+            <ul class="meta">
+              <li>開始姿勢: 立って壁や机に手を添えます。</li>
+              <li>動き方: 片脚のひざをゆっくり持ち上げます。</li>
+              <li>回数: 左右 10 回ずつ</li>
+              <li>注意点: 体が大きく傾かないようにします。</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="alerts">
+        <h2>中止・相談の目安</h2>
+        <ul>
+          <li>いつもより強い痛みが続くとき</li>
+          <li>しびれや脱力が強くなるとき</li>
+          <li>ふらついて転びそうになるとき</li>
+        </ul>
+      </section>
+    </main>
+  </body>
+  </html>

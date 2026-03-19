@@ -1,0 +1,4 @@
+interface:
+  display_name: "バズレシピ"
+  short_description: "具材からリュウジ系レシピ候補と調味料の調整案まで整理"
+  default_prompt: "Use $buzz-recipe to search Ryuji バズレシピ ideas from these ingredients, list likely dishes with ingredients and seasonings, and suggest practical tweaks for missing or extra items."
