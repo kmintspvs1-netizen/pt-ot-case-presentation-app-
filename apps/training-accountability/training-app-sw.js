@@ -14,7 +14,6 @@ const messaging = firebase.messaging();
 const CACHE_NAME = "training-accountability-cache-v3";
 const APP_ASSETS = [
   "./",
-  "./index.html",
   "./training-accountability-app.html",
   "./training-accountability-app.js",
   "./training-app.webmanifest",

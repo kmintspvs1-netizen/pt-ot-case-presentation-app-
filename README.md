@@ -1,129 +1,168 @@
 # Playground
 
-このフォルダは、1つの単独アプリのリポジトリというより、複数の試作アプリ、スキル、出力ファイルをまとめて置いている作業用フォルダです。
+このフォルダは、1つのアプリではありません。
 
-## まず何を開けばいいか
+複数のアプリ、Codex 用スキル、素材、出力物、ローカル作業フォルダをまとめた作業場です。
 
-- 入口ページ: [index.html](./index.html)
-- 新しめのアプリ: [training-accountability-app.html](./training-accountability-app.html)
-- 既存のPT / OTアプリ: [pt-case-presentation-app.html](./pt-case-presentation-app.html)
+見やすくするために、役割ごとに分けました。
 
-通常は `index.html` を開くと、どのアプリに進むか選びやすいです。
+## いまの構成
 
-## 全体マップ
+### `apps/`
 
-### 1. 入口ページ
+ブラウザで開くアプリです。
 
-- [index.html](./index.html)
-  - このフォルダの案内ページです。
-  - 各アプリへのリンクがあります。
+- `apps/training-accountability/`
+  - いまの主力アプリ
+  - 中身:
+    - `training-accountability-app.html`
+    - `training-accountability-app.js`
+    - `training-app-sw.js`
+    - `training-app.webmanifest`
+    - `training-app-icon.svg`
+- `apps/pt-case-presentation/`
+  - PT / OT ケースプレゼン用アプリ
+  - 中身:
+    - `pt-case-presentation-app.html`
+- `apps/standalone/`
+  - 単発の HTML ツール
+  - 中身:
+    - `ameblo-image-generator.html`
+    - `online-academy.html`
 
-### 2. Webアプリ
+### `public/`
 
-- [training-accountability-app.html](./training-accountability-app.html)
-  - トレーニング習慣化アプリの画面です。
-- [training-accountability-app.js](./training-accountability-app.js)
-  - 上記アプリのロジックです。
-- [training-app-sw.js](./training-app-sw.js)
-  - Service Worker です。
-- [training-app.webmanifest](./training-app.webmanifest)
-  - PWA 用の設定ファイルです。
-- [pt-case-presentation-app.html](./pt-case-presentation-app.html)
-  - PT / OT ケースプレゼン用アプリです。
-- [ameblo-image-generator.html](./ameblo-image-generator.html)
-  - 単体のHTMLツールです。
-- [online-academy.html](./online-academy.html)
-  - 単体のHTMLページです。
+Firebase Hosting に公開するファイルです。
 
-### 3. 公開用の別フォルダ
+ここは配信用です。普段の編集元とは分けてあります。
 
-- [pt-case-presentation-pages](./pt-case-presentation-pages/)
-  - GitHub Pages に載せるための静的サイトです。
-  - 中心ファイルは [pt-case-presentation-pages/index.html](./pt-case-presentation-pages/index.html) です。
-  - 説明は [pt-case-presentation-pages/README.md](./pt-case-presentation-pages/README.md) にあります。
+### `functions/`
 
-### 4. スキル用フォルダ
+Firebase Functions のサーバー側コードです。
 
-以下は「アプリ本体」というより、Codex に特定の仕事をさせるための説明書、テンプレート、参考資料です。
+### `skills/`
 
-- [pt-case-presentation](./pt-case-presentation/)
-- [pt-evidence-review](./pt-evidence-review/)
-- [patient-home-exercise-handout](./patient-home-exercise-handout/)
-- [buzz-recipe](./buzz-recipe/)
-- [pt-internal-slides](./pt-internal-slides/)
+Codex 用のスキルです。
 
-各フォルダには、`SKILL.md`、`assets/`、`references/`、`agents/` などが入っています。
+- `skills/buzz-recipe/`
+- `skills/patient-home-exercise-handout/`
+- `skills/pt-case-presentation/`
+- `skills/pt-evidence-review/`
 
-### 5. データ・成果物
+### `exports/`
 
-- `pt-case-presentation-case1*.json`
-- `pt-case-presentation-case1*.pptx`
-- `pt-internal-slides-case1.json`
-- `pt-internal-slides-case1.pptx`
+生成したファイルや出力物です。
 
-これらはケースデータや、生成済みの PowerPoint ファイルです。
+- `exports/presentations/`
+  - PowerPoint や JSON サンプル
+- `exports/pdfs/`
+  - PDF 出力物
+- `exports/output/`
+  - そのほかの出力物
 
-### 6. 補助ツール・素材
+### `assets/`
 
-- [convert_mov_to_mp4.swift](./convert_mov_to_mp4.swift)
-- [IMG_3458.mp4](./IMG_3458.mp4)
-- [ffmpeg.zip](./ffmpeg.zip)
-- [ffmpeg_bin](./ffmpeg_bin/)
+素材ファイルです。
 
-## このフォルダを見るときの考え方
+- `assets/media/`
+  - 動画や関連メモ
 
-この作業場は、大きく分けると次の3種類でできています。
+### `tools/`
 
-- ブラウザで開くアプリ
-- Codex 用のスキル定義
-- 出力データや素材ファイル
+補助ツールです。
 
-そのため、「全部が1つの仕組みで動くプロジェクト」ではありません。
+- `tools/media/`
+  - 変換スクリプト
+  - `ffmpeg` 一式
 
-## よくある混乱ポイント
+### `docs/`
 
-### 1. `package.json` がないとはどういう意味か
+メモや参考資料です。
 
-`package.json` は、JavaScript プロジェクトでよく使う「共通の設定ファイル」です。
+- `docs/notes/`
+  - 作業メモ
+- `docs/cases/`
+  - 単発のケース資料
 
-たとえば普通のプロジェクトでは、ここに以下のような情報が入ります。
+### `scratch/`
 
-- 使っているライブラリ
-- 起動方法
-- テスト方法
-- ビルド方法
-- Lint の方法
+ローカル作業用の置き場です。
 
-このフォルダには、ルート全体を管理するその種のファイルが見当たりません。
-つまり、`Playground` 全体に共通する「決まった起動手順」や「標準テスト手順」があるわけではなさそう、という意味です。
+GitHub に上げない一時フォルダを寄せています。
 
-言い換えると、ここは「統一された製品リポジトリ」というより、「用途ごとの小さな制作物をまとめた置き場」です。
+- `scratch/work/`
+- `scratch/local-projects/`
 
-### 2. `pt-case-presentation-pages` に独立した `.git` があるとはどういう意味か
+## ルート直下に残しているもの
 
-このフォルダ全体には [`.git`](./.git/) があり、普通はその下のファイルをまとめて1つの Git 履歴で管理します。
+### 残している理由があるもの
 
-ただし、[pt-case-presentation-pages](./pt-case-presentation-pages/) の中にも別の `.git` があります。
-これは、そのフォルダだけが別の Git 管理単位になっている可能性がある、ということです。
+- `index.html`
+  - 入口ページ
+- `firebase.json`
+  - Firebase の公開設定
+- `.firebaserc`
+  - Firebase プロジェクト指定
+- `.gitignore`
+  - Git に入れないファイルの設定
+- `README.md`
+  - この説明
 
-イメージとしては次のような状態です。
+### そのまま残したもの
 
-- 外側: `Playground` 全体の Git
-- 内側: `pt-case-presentation-pages` だけの別 Git
+- `cloud-run/`
+  - まだ今回の整理対象に入れていない
+- `pt-case-presentation-pages/`
+  - 独立した Git 管理を含むため、今回は動かしていない
 
-そのため Git を使うときに、「外側の履歴として扱うのか」「内側のフォルダ単体で扱うのか」を意識する必要があります。
+## まずどこを見ればいいか
 
-危険というより、「Git の見え方が少しややこしい」という理解で大丈夫です。
+### ふだんの入口
 
-## 今後このフォルダを触るときのおすすめ
+- `index.html`
 
-- まず [index.html](./index.html) を入口として考える
-- Web アプリを触るなら、対象の `html` と対応する `js` をセットで見る
-- スキルを触るなら、各フォルダの `SKILL.md` から読む
-- Git 操作をするときは、[pt-case-presentation-pages](./pt-case-presentation-pages/) を別管理かもしれない前提で慎重に見る
+### トレーニングアプリを触る
 
-## ひとことで言うと
+- `apps/training-accountability/`
+- 公開側も見るなら `public/`
+- サーバー側も見るなら `functions/`
 
-この `Playground` は、
-「複数の小さな制作物が同居している作業場」
-です。
+### スキルを触る
+
+- `skills/` 以下
+
+### 出力物を見る
+
+- `exports/` 以下
+
+## Git 的にどういう意味か
+
+今回の整理では、
+
+- アプリ本体
+- スキル
+- 出力物
+- ローカル専用ファイル
+
+を分けました。
+
+これで、少なくとも「何がアプリで、何がただの作業ファイルか」は見分けやすくなっています。
+
+## まだ整理していないもの
+
+次は必要ならここを整理できます。
+
+- `cloud-run/`
+- `pt-case-presentation-pages/`
+- `.build/`
+- `.clang-cache/`
+- `.local-tools/`
+- `.firebase/`
+
+このあたりは、
+
+- 独立性がある
+- ローカル依存が強い
+- Git やビルドの事情に影響しやすい
+
+ので、今回は安全側でそのままにしています。

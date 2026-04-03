@@ -7,7 +7,7 @@
 
 ## Main Files
 
-- App: `/Users/kohey/Documents/Playground/pt-case-presentation-app.html`
+- App: `/Users/kohey/Documents/Playground/apps/pt-case-presentation/pt-case-presentation-app.html`
 - Entry page for Pages: `/Users/kohey/Documents/Playground/index.html`
 
 ## Update Steps
@@ -16,7 +16,7 @@ Open Terminal and run:
 
 ```bash
 cd /Users/kohey/Documents/Playground
-git add pt-case-presentation-app.html index.html .gitignore
+git add apps/pt-case-presentation/pt-case-presentation-app.html index.html .gitignore
 git commit -m "Update PT/OT case presentation app"
 git push
 ```
