@@ -1,0 +1,15 @@
+{
+  "functions": {
+    "source": "functions"
+  },
+  "hosting": {
+    "site": "training-accountability-app",
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "cleanUrls": true
+  }
+}

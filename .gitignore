@@ -1,1 +1,21 @@
 .DS_Store
+
+# Local build artifacts and toolchains
+.build/
+.clang-cache/
+.local-tools/
+functions/node_modules/
+
+# Generated outputs and temporary working files
+.firebase/
+output/
+tmp/
+*.searchable.pdf
+
+# Local-only research/work folders
+jspt_ebpt_sidebar_pdfs_20260323/
+kindle-searchable-pdf/
+scripts/
+stroke_shogi_case_discussion.html
+stroke_shogi_case_discussion.md
+stroke_shogi_case_discussion.pdf
