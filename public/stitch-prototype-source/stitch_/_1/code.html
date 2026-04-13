@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ja"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#a8c8ff",
+                    "surface-container-high": "#e7e8f0",
+                    "on-primary-container": "#cadcff",
+                    "on-tertiary-fixed-variant": "#00504a",
+                    "on-primary": "#ffffff",
+                    "primary": "#00488d",
+                    "error-container": "#ffdad6",
+                    "surface-tint": "#005db5",
+                    "outline-variant": "#c2c6d4",
+                    "on-background": "#191c21",
+                    "primary-container": "#005fb8",
+                    "secondary": "#006a6a",
+                    "surface-container-low": "#f2f3fb",
+                    "on-tertiary": "#ffffff",
+                    "on-surface": "#191c21",
+                    "surface-dim": "#d8dae2",
+                    "outline": "#727783",
+                    "surface": "#f9f9ff",
+                    "tertiary-container": "#006c65",
+                    "on-primary-fixed": "#001b3d",
+                    "secondary-fixed-dim": "#76d6d5",
+                    "surface-bright": "#f9f9ff",
+                    "tertiary-fixed-dim": "#71d7cd",
+                    "on-secondary-container": "#006e6e",
+                    "error": "#ba1a1a",
+                    "on-error-container": "#93000a",
+                    "tertiary": "#00524c",
+                    "surface-container-highest": "#e1e2ea",
+                    "inverse-on-surface": "#eff0f8",
+                    "primary-fixed": "#d6e3ff",
+                    "on-tertiary-container": "#86ece1",
+                    "surface-variant": "#e1e2ea",
+                    "tertiary-fixed": "#8ef4e9",
+                    "on-secondary-fixed-variant": "#004f4f",
+                    "on-primary-fixed-variant": "#00468b",
+                    "secondary-fixed": "#93f2f2",
+                    "on-tertiary-fixed": "#00201d",
+                    "secondary-container": "#90efef",
+                    "inverse-primary": "#a8c8ff",
+                    "on-secondary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "surface-container": "#ecedf6",
+                    "on-secondary-fixed": "#002020",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-surface": "#2e3036",
+                    "on-surface-variant": "#424752",
+                    "background": "#f9f9ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "xl2": "1.0rem",
+                    "xl3": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope", "sans-serif"],
+                    "body": ["Inter", "sans-serif"],
+                    "label": ["Inter", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface font-body text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-[#f9f9ff] dark:bg-slate-950 docked full-width top-0 z-40">
+<div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full overflow-hidden">
+<img alt="ユーザープロフィール写真" class="w-full h-full object-cover" data-alt="professional headshot of a smiling man with clean background, soft studio lighting, focused on eyes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALBjKTG1anfq_iw0Yxd5iUjXy62V4nLH3m5POGOmkWQzM453q4MRRMvbveMNxD65rxwo8Ja5-f0NZqNQrolCjGHrv6jrSz_oy92M4NOEsOagXvZM9olDoqyyssfmE3LbWcHXyyIoLfRLhnZeM3Jl-qpClWpldE2qW0PjmLrSxmDR7lIHJ6NzNOGSP6Z5EEQ2XgDEjPcOdl4Z-oXa_kmxMnvK7L4cAcMz_y5hNBBjZAKKEVnB13pJjBR4zVann_XCVZVjDfl_9EGQ"/>
+</div>
+<h1 class="font-manrope font-extrabold text-[#00488d] dark:text-blue-400 text-xl">Methodical Flow</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-slate-500 dark:text-slate-400 hover:bg-[#e7e8f0] dark:hover:bg-slate-800 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-8">
+<!-- Header Section -->
+<section class="mb-12">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<span class="font-label text-[0.6875rem] font-semibold uppercase tracking-wider text-secondary mb-2 block">ミッションコントロール</span>
+<h2 class="font-headline text-[2.5rem] leading-tight font-extrabold text-on-surface">長期目標</h2>
+<p class="text-on-surface-variant max-w-lg mt-2 font-body text-[0.875rem]">計画的なマイルストーンを通じて未来を構築しましょう。これらはあなたの北極星となる目的です。</p>
+</div>
+<div class="flex items-center gap-4 bg-surface-container-low p-2 rounded-xl3">
+<div class="px-4 py-2 bg-surface-container-lowest rounded-xl shadow-sm">
+<span class="block text-[0.6875rem] text-outline font-medium">現在の目標</span>
+<span class="text-xl font-bold text-primary">04</span>
+</div>
+<div class="px-4 py-2">
+<span class="block text-[0.6875rem] text-outline font-medium">達成率</span>
+<span class="text-xl font-bold text-tertiary">68%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Goals Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Focus Goal Card (Large) -->
+<div class="md:col-span-8 bg-surface-container-lowest rounded-xl3 p-8 relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-tertiary"></div>
+<div class="flex flex-col h-full">
+<div class="flex justify-between items-start mb-8">
+<div>
+<span class="px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed rounded-full text-[0.6875rem] font-bold uppercase tracking-widest">優先度：アルファ</span>
+<h3 class="font-headline text-2xl font-bold mt-4 text-on-surface">6ヶ月でPythonを習得する</h3>
+<p class="text-on-surface-variant mt-2 text-[0.875rem]">バックエンド開発とデータサイエンスの基礎をマスターする。</p>
+</div>
+<div class="text-right">
+<span class="text-3xl font-headline font-extrabold text-tertiary">45%</span>
+<span class="block text-[0.6875rem] text-outline uppercase font-bold mt-1">進捗</span>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-3 bg-surface-container-high rounded-full overflow-hidden mb-8">
+<div class="h-full bg-gradient-to-r from-tertiary to-tertiary-fixed-dim w-[45%] rounded-full"></div>
+</div>
+<div class="mt-auto flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface-container-lowest bg-surface-container-high flex items-center justify-center text-[10px] font-bold">PY</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface-container-lowest bg-surface-container-high flex items-center justify-center text-[10px] font-bold">DS</div>
+</div>
+<button class="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-label text-[0.875rem] font-semibold hover:bg-primary-container transition-all active:scale-95">
+                            詳細表示
+                            <span class="material-symbols-outlined text-[18px]">account_tree</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Side Card (Medium) -->
+<div class="md:col-span-4 bg-surface-container-low rounded-xl3 p-6 flex flex-col">
+<div class="flex items-center justify-between mb-6">
+<span class="material-symbols-outlined text-secondary p-2 bg-secondary-container rounded-xl">beach_access</span>
+<span class="text-on-surface-variant font-label text-[0.6875rem] font-bold uppercase">2024年12月</span>
+</div>
+<h3 class="font-headline text-xl font-bold text-on-surface">休暇のための貯金</h3>
+<p class="text-on-surface-variant mt-2 text-[0.875rem] leading-relaxed">東京・京都：14日間の探訪旅行予算。</p>
+<div class="mt-8">
+<div class="flex justify-between text-[0.6875rem] font-bold uppercase text-outline mb-2">
+<span>$3,200 / $5,000</span>
+<span>64%</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[64%] rounded-full"></div>
+</div>
+</div>
+<button class="mt-auto w-full py-3 bg-surface-container-high text-primary rounded-xl font-label text-[0.875rem] font-semibold hover:bg-[#e7e8f0] transition-all">
+                    詳細表示
+                </button>
+</div>
+<!-- Small Card 1 -->
+<div class="md:col-span-4 bg-surface-container-lowest rounded-xl3 p-6 border-l-4 border-primary">
+<h3 class="font-headline text-lg font-bold text-on-surface">マラソンを完走する</h3>
+<div class="flex items-center gap-2 mt-4 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">directions_run</span>
+<span class="text-[0.6875rem] font-medium">2024年10月15日</span>
+</div>
+<div class="mt-6 flex items-center justify-between">
+<div class="w-24 h-1.5 bg-surface-container-low rounded-full">
+<div class="h-full bg-primary w-[20%] rounded-full"></div>
+</div>
+<button class="text-primary hover:underline font-label text-[0.75rem] font-bold uppercase tracking-tight">詳細表示</button>
+</div>
+</div>
+<!-- Small Card 2 -->
+<div class="md:col-span-4 bg-surface-container-lowest rounded-xl3 p-6 border-l-4 border-secondary">
+<h3 class="font-headline text-lg font-bold text-on-surface">スタジオをリノベーションする</h3>
+<div class="flex items-center gap-2 mt-4 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">architecture</span>
+<span class="text-[0.6875rem] font-medium">進行中のプロジェクト</span>
+</div>
+<div class="mt-6 flex items-center justify-between">
+<div class="w-24 h-1.5 bg-surface-container-low rounded-full">
+<div class="h-full bg-secondary w-[85%] rounded-full"></div>
+</div>
+<button class="text-primary hover:underline font-label text-[0.75rem] font-bold uppercase tracking-tight">詳細表示</button>
+</div>
+</div>
+<!-- Daily Task Comparison (Different visual style) -->
+<div class="md:col-span-4 bg-[#e7e8f0]/40 backdrop-blur-sm rounded-xl3 p-6 flex flex-col justify-center border border-dashed border-outline-variant/30">
+<div class="text-center">
+<span class="material-symbols-outlined text-outline mb-2">checklist</span>
+<h4 class="font-headline font-bold text-on-surface-variant">タスクをお探しですか？</h4>
+<p class="text-[0.75rem] text-outline px-4 mt-1">日常の業務はタスクダッシュボードで管理されています。</p>
+<button class="mt-4 px-4 py-2 bg-surface-container-lowest text-primary rounded-lg text-[0.75rem] font-bold shadow-sm hover:shadow-md transition-shadow">
+                        表示を切り替える
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB for adding new goal -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-gradient-to-br from-[#00488d] to-[#005fb8] text-white rounded-2xl shadow-xl flex items-center justify-center transition-all hover:scale-110 active:scale-95 z-50 group">
+<span class="material-symbols-outlined text-[32px]">add</span>
+<span class="absolute right-full mr-4 bg-on-background text-white px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">新しい目標を追加</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#ffffff]/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-[0_-4px_20px_0_rgba(25,28,33,0.04)] rounded-t-3xl">
+<a class="flex flex-col items-center justify-center text-[#191c21] dark:text-slate-300 px-5 py-2 opacity-60 hover:bg-[#f2f3fb] dark:hover:bg-slate-800 rounded-xl transition-all duration-300 ease-out" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-inter text-[11px] font-medium uppercase tracking-wider mt-1">ダッシュボード</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#00488d] to-[#005fb8] text-white rounded-2xl px-5 py-2 transition-all duration-300 ease-out" href="#">
+<span class="material-symbols-outlined">emoji_events</span>
+<span class="font-inter text-[11px] font-medium uppercase tracking-wider mt-1">目標</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#191c21] dark:text-slate-300 px-5 py-2 opacity-60 hover:bg-[#f2f3fb] dark:hover:bg-slate-800 rounded-xl transition-all duration-300 ease-out" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-inter text-[11px] font-medium uppercase tracking-wider mt-1">タスク</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#191c21] dark:text-slate-300 px-5 py-2 opacity-60 hover:bg-[#f2f3fb] dark:hover:bg-slate-800 rounded-xl transition-all duration-300 ease-out" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-inter text-[11px] font-medium uppercase tracking-wider mt-1">分析</span>
+</a>
+</nav>
+</body></html>

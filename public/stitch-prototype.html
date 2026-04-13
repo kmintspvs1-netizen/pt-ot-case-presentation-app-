@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stitch Prototype Viewer</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: rgba(255, 255, 255, 0.86);
+      --panel-strong: #ffffff;
+      --text: #122033;
+      --muted: #5d6a7d;
+      --accent: #00488d;
+      --accent-soft: #0d7a7a;
+      --line: rgba(18, 32, 51, 0.08);
+      --shadow: 0 24px 60px rgba(18, 32, 51, 0.12);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --max-width: 1200px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Inter", "Hiragino Sans", "Yu Gothic", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(0, 72, 141, 0.18), transparent 24%),
+        radial-gradient(circle at right top, rgba(13, 122, 122, 0.14), transparent 20%),
+        linear-gradient(180deg, #f7fbff 0%, #eef3f9 52%, #f6f8fc 100%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .shell {
+      width: min(var(--max-width), calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 3rem 0 2rem;
+    }
+
+    .hero-panel {
+      background: var(--panel);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(0, 72, 141, 0.08);
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    h1 {
+      margin: 1rem 0 0.75rem;
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 62ch;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    .meta-grid {
+      margin-top: 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .meta-card {
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.1rem;
+    }
+
+    .meta-card strong {
+      display: block;
+      font-size: 1.35rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .section-title {
+      margin: 0 0 1rem;
+      font-size: 1.4rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.25rem;
+      padding-bottom: 3rem;
+    }
+
+    .card {
+      background: var(--panel-strong);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(18, 32, 51, 0.08);
+    }
+
+    .card-image {
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: #dde7f2;
+    }
+
+    .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    .card-body {
+      padding: 1.25rem;
+    }
+
+    .card-label {
+      display: inline-block;
+      margin-bottom: 0.75rem;
+      color: var(--accent-soft);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+
+    .card p {
+      margin: 0.75rem 0 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0.8rem 1rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: 0.95rem;
+      font-weight: 700;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-1px);
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, var(--accent) 0%, #0065c7 100%);
+      color: #ffffff;
+      box-shadow: 0 14px 28px rgba(0, 72, 141, 0.22);
+    }
+
+    .button-secondary {
+      background: #f3f7fb;
+      border-color: var(--line);
+      color: var(--text);
+    }
+
+    .notes {
+      margin: 0 0 3rem;
+      padding: 1.25rem;
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .notes strong {
+      color: var(--text);
+    }
+
+    @media (max-width: 860px) {
+      .meta-grid,
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-panel {
+        padding: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="hero-panel">
+        <span class="eyebrow">VIEW ONLY PROTOTYPE</span>
+        <h1>ZIPの画面をそのまま見られる試作品です</h1>
+        <p class="lead">
+          これは「動く機能を作る前の確認用ページ」です。ボタンから各画面を開いて、
+          デザインや画面の雰囲気をブラウザで確認できます。
+        </p>
+        <div class="meta-grid">
+          <div class="meta-card">
+            <strong>6</strong>
+            画面を一覧で確認できます
+          </div>
+          <div class="meta-card">
+            <strong>HTML</strong>
+            元データをそのまま配置しています
+          </div>
+          <div class="meta-card">
+            <strong>次の段階</strong>
+            気に入ったら機能追加に進めます
+          </div>
+        </div>
+        <div class="actions" style="margin-top: 1.25rem;">
+          <a class="button button-primary" href="./methodical-flow-app.html">SCREEN2ベースの実用版を開く</a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">画面一覧</h2>
+      <div class="cards">
+        <article class="card">
+          <div class="card-image">
+            <img src="./stitch-prototype-source/stitch_/_1/screen.png" alt="画面1のプレビュー">
+          </div>
+          <div class="card-body">
+            <span class="card-label">Screen 1</span>
+            <h2>長期目標ダッシュボード</h2>
+            <p>大きな目標カードと進捗率を中心に見せるトップ画面です。</p>
+            <div class="actions">
+              <a class="button button-primary" href="./stitch-prototype-source/stitch_/_1/code.html" target="_blank" rel="noopener noreferrer">画面を開く</a>
+              <a class="button button-secondary" href="./stitch-prototype-source/stitch_/_1/screen.png" target="_blank" rel="noopener noreferrer">画像を見る</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-image">
+            <img src="./stitch-prototype-source/stitch_/_2/screen.png" alt="画面2のプレビュー">
+          </div>
+          <div class="card-body">
+            <span class="card-label">Screen 2</span>
+            <h2>朝のホーム画面</h2>
+            <p>今日の優先タスクと進行中の目標が大きく見えるホーム画面です。</p>
+            <div class="actions">
+              <a class="button button-primary" href="./stitch-prototype-source/stitch_/_2/code.html" target="_blank" rel="noopener noreferrer">画面を開く</a>
+              <a class="button button-secondary" href="./stitch-prototype-source/stitch_/_2/screen.png" target="_blank" rel="noopener noreferrer">画像を見る</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-image">
+            <img src="./stitch-prototype-source/stitch_/_3/screen.png" alt="画面3のプレビュー">
+          </div>
+          <div class="card-body">
+            <span class="card-label">Screen 3</span>
+            <h2>週間スケジュール</h2>
+            <p>1週間の予定をカレンダー形式で確認するための画面です。</p>
+            <div class="actions">
+              <a class="button button-primary" href="./stitch-prototype-source/stitch_/_3/code.html" target="_blank" rel="noopener noreferrer">画面を開く</a>
+              <a class="button button-secondary" href="./stitch-prototype-source/stitch_/_3/screen.png" target="_blank" rel="noopener noreferrer">画像を見る</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-image">
+            <img src="./stitch-prototype-source/stitch_/_4/screen.png" alt="画面4のプレビュー">
+          </div>
+          <div class="card-body">
+            <span class="card-label">Screen 4</span>
+            <h2>分析と進捗レポート</h2>
+            <p>目標達成の傾向やレポートを確認する分析用の画面です。</p>
+            <div class="actions">
+              <a class="button button-primary" href="./stitch-prototype-source/stitch_/_4/code.html" target="_blank" rel="noopener noreferrer">画面を開く</a>
+              <a class="button button-secondary" href="./stitch-prototype-source/stitch_/_4/screen.png" target="_blank" rel="noopener noreferrer">画像を見る</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-image">
+            <img src="./stitch-prototype-source/stitch_/_5/screen.png" alt="画面5のプレビュー">
+          </div>
+          <div class="card-body">
+            <span class="card-label">Screen 5</span>
+            <h2>別案の週間スケジュール</h2>
+            <p>カレンダー画面の別バリエーションを比較確認できるようにしています。</p>
+            <div class="actions">
+              <a class="button button-primary" href="./stitch-prototype-source/stitch_/_5/code.html" target="_blank" rel="noopener noreferrer">画面を開く</a>
+              <a class="button button-secondary" href="./stitch-prototype-source/stitch_/_5/screen.png" target="_blank" rel="noopener noreferrer">画像を見る</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-image">
+            <img src="./stitch-prototype-source/stitch_/_6/screen.png" alt="画面6のプレビュー">
+          </div>
+          <div class="card-body">
+            <span class="card-label">Screen 6</span>
+            <h2>別案のホーム画面</h2>
+            <p>ホーム画面の別バリエーションです。見た目の方向性を比べるのに使えます。</p>
+            <div class="actions">
+              <a class="button button-primary" href="./stitch-prototype-source/stitch_/_6/code.html" target="_blank" rel="noopener noreferrer">画面を開く</a>
+              <a class="button button-secondary" href="./stitch-prototype-source/stitch_/_6/screen.png" target="_blank" rel="noopener noreferrer">画像を見る</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="notes">
+      <strong>今の状態:</strong> この試作品は「閲覧専用」です。データ保存やログインのような機能はまだありません。
+      次に必要なら、気に入った画面をベースにして「ボタンを押したら移動する」「入力内容を保持する」といった機能を少しずつ足していけます。
+    </section>
+  </main>
+</body>
+</html>

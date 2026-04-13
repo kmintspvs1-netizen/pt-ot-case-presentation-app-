@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Methodical Flow App</title>
+  <meta name="theme-color" content="#f9f9ff">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./methodical-flow-app.css">
+</head>
+<body>
+  <nav class="topbar">
+    <div class="shell topbar-inner">
+      <div class="brand">
+        <div class="brand-mark">MF</div>
+        <span>Methodical Flow</span>
+      </div>
+      <div class="top-links">
+        <a href="#dashboard">ダッシュボード</a>
+        <a href="#goals">目標</a>
+        <a href="#tasks">タスク</a>
+        <a href="#settings">設定</a>
+      </div>
+      <button class="icon-button" id="resetButton" type="button" aria-label="サンプル状態に戻す">
+        <span class="material-symbols-outlined">restart_alt</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="shell page">
+    <header class="hero" id="dashboard">
+      <div class="hero-copy">
+        <span class="eyebrow">集中モード: ON</span>
+        <h1 id="heroTitle">おはようございます。</h1>
+        <p id="heroSubtitle">今日の優先タスクとメイン目標をまとめて確認できます。</p>
+      </div>
+      <div class="hero-actions">
+        <a class="button secondary" href="#goalForm">新規目標</a>
+        <a class="button primary" href="#taskForm">タスク追加</a>
+      </div>
+    </header>
+
+    <section class="stats-grid" aria-label="サマリー">
+      <article class="stat-card">
+        <p class="stat-label">今日の優先タスク</p>
+        <p class="stat-value" id="todayTaskCount">0件</p>
+      </article>
+      <article class="stat-card">
+        <p class="stat-label">完了済み</p>
+        <p class="stat-value" id="completedTaskCount">0件</p>
+      </article>
+      <article class="stat-card">
+        <p class="stat-label">進行中の目標</p>
+        <p class="stat-value" id="goalCount">0件</p>
+      </article>
+      <article class="stat-card">
+        <p class="stat-label">平均進捗</p>
+        <p class="stat-value" id="averageProgress">0%</p>
+      </article>
+    </section>
+
+    <section class="layout">
+      <article class="focus-card" id="goals">
+        <div class="focus-card-glow" aria-hidden="true"></div>
+        <div class="focus-head">
+          <div>
+            <span class="chip">実行中の目標</span>
+            <h2 id="focusGoalTitle">目標を追加してみましょう</h2>
+          </div>
+          <span class="material-symbols-outlined focus-icon">emoji_events</span>
+        </div>
+
+        <div class="progress-wrap">
+          <svg class="progress-ring" viewBox="0 0 220 220" aria-hidden="true">
+            <circle class="ring-base" cx="110" cy="110" r="88"></circle>
+            <circle class="ring-value" id="focusRing" cx="110" cy="110" r="88"></circle>
+          </svg>
+          <div class="progress-copy">
+            <strong id="focusGoalProgress">0%</strong>
+            <span>達成済み</span>
+          </div>
+        </div>
+
+        <div class="focus-meta">
+          <p id="focusGoalDescription">下のフォームから目標を追加すると、ここに最優先の目標が表示されます。</p>
+          <div class="focus-line">
+            <span id="focusGoalMilestone">次回のマイルストーン: 未設定</span>
+            <span id="focusGoalDeadline">期限未設定</span>
+          </div>
+        </div>
+
+        <form class="inline-form" id="goalProgressForm">
+          <label>
+            進捗を更新
+            <input id="focusProgressInput" type="range" min="0" max="100" value="0">
+          </label>
+          <button class="button primary" type="submit">進捗を保存</button>
+        </form>
+      </article>
+
+      <article class="task-panel" id="tasks">
+        <div class="section-head">
+          <h2>本日の優先事項</h2>
+          <button class="link-button" id="showAllTasksButton" type="button">すべて表示</button>
+        </div>
+
+        <form class="quick-add-card" id="taskForm">
+          <p class="input-section-title">タスク入力欄</p>
+          <input id="taskEditingId" type="hidden">
+          <div class="quick-add-row">
+            <span class="material-symbols-outlined field-icon">add_circle</span>
+            <input id="taskTitleInput" type="text" placeholder="新しいタスクを入力..." required>
+          </div>
+          <div class="quick-add-grid">
+            <label>
+              期限
+              <input id="taskDateInput" type="date" required>
+            </label>
+            <label>
+              時間
+              <input id="taskTimeInput" type="time" value="09:00">
+            </label>
+            <label>
+              優先度
+              <select id="taskPriorityInput">
+                <option value="high">高</option>
+                <option value="medium" selected>中</option>
+                <option value="low">低</option>
+              </select>
+            </label>
+            <label>
+              メモ
+              <input id="taskTagInput" type="text" placeholder="例: 家事 / 勉強 / 仕事">
+            </label>
+          </div>
+          <div class="quick-add-actions">
+            <p class="form-note" id="taskFormStatus">タスクを追加すると自動で保存されます。</p>
+            <div class="inline-actions">
+              <button class="button secondary" id="cancelTaskEditButton" type="button" hidden>編集をやめる</button>
+              <button class="button primary" id="taskSubmitButton" type="submit">追加</button>
+            </div>
+          </div>
+        </form>
+
+        <div class="list-head">
+          <h3>登録済みタスク</h3>
+          <p>追加したタスクはここに表示されます。</p>
+        </div>
+        <div class="task-list" id="taskList" aria-live="polite"></div>
+      </article>
+    </section>
+
+    <section class="bottom-grid">
+      <article class="panel form-panel">
+        <div class="section-head">
+          <h2>目標を追加</h2>
+        </div>
+        <form class="field-grid" id="goalForm">
+          <input id="goalEditingId" type="hidden">
+          <label>
+            目標名
+            <input id="goalTitleInput" type="text" placeholder="例: 3か月で運動習慣を整える" required>
+          </label>
+          <label>
+            説明
+            <textarea id="goalDescriptionInput" rows="3" placeholder="何を目指す目標かを書きます"></textarea>
+          </label>
+          <div class="field-grid two">
+            <label>
+              進捗 (%)
+              <input id="goalProgressInput" type="number" min="0" max="100" value="0">
+            </label>
+            <label>
+              期限
+              <input id="goalDeadlineInput" type="date">
+            </label>
+          </div>
+          <label>
+            次のマイルストーン
+            <input id="goalMilestoneInput" type="text" placeholder="例: 1週目を毎日記録する">
+          </label>
+          <div class="inline-actions">
+            <button class="button secondary full-width" id="cancelGoalEditButton" type="button" hidden>編集をやめる</button>
+            <button class="button primary full-width" id="goalSubmitButton" type="submit">目標を保存</button>
+          </div>
+        </form>
+      </article>
+
+      <article class="panel goals-panel">
+        <div class="section-head">
+          <h2>登録した目標</h2>
+        </div>
+        <div class="goal-list" id="goalList" aria-live="polite"></div>
+      </article>
+
+      <article class="panel form-panel" id="settings">
+        <div class="section-head">
+          <h2>設定</h2>
+        </div>
+        <form class="field-grid" id="settingsForm">
+          <label>
+            表示名
+            <input id="profileNameInput" type="text" placeholder="例: こうへい">
+          </label>
+          <fieldset class="weekday-fieldset">
+            <legend>仕事の日</legend>
+            <p class="weekday-note">シフト制向けに、仕事の日を日付ごとに登録できます。登録した日だけ仕事向けの挨拶になります。</p>
+            <div class="workdate-entry">
+              <label>
+                勤務日を追加
+                <input id="workDateInput" type="date">
+              </label>
+              <button class="button secondary" id="addWorkDateButton" type="button">追加</button>
+            </div>
+            <div class="workdate-bulk">
+              <div class="calendar-head">
+                <div>
+                  <h3>カレンダーから複数選択</h3>
+                  <p class="weekday-note">追加したい日を複数クリックしてから、まとめて追加してください。</p>
+                </div>
+                <div class="calendar-actions">
+                  <button class="mini-button" id="workCalendarPrevButton" type="button" aria-label="前の月">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                  </button>
+                  <strong id="workCalendarTitle"></strong>
+                  <button class="mini-button" id="workCalendarNextButton" type="button" aria-label="次の月">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                  </button>
+                </div>
+              </div>
+              <div class="mini-calendar-weekdays" aria-hidden="true">
+                <span>日</span>
+                <span>月</span>
+                <span>火</span>
+                <span>水</span>
+                <span>木</span>
+                <span>金</span>
+                <span>土</span>
+              </div>
+              <div class="mini-calendar-grid" id="workCalendarGrid" aria-live="polite"></div>
+              <div class="quick-add-actions">
+                <p class="form-note" id="workCalendarStatus">選んだ日付をまとめて勤務日に追加できます。</p>
+                <button class="button secondary" id="addBulkWorkDatesButton" type="button">選択日を追加</button>
+              </div>
+            </div>
+            <div class="workdate-list" id="workDateList" aria-live="polite"></div>
+          </fieldset>
+          <label>
+            ホームのひとこと
+            <textarea id="dailyMessageInput" rows="3" placeholder="例: 午前中に一番大事なことを片づける"></textarea>
+          </label>
+          <fieldset class="weekday-fieldset">
+            <legend>通知</legend>
+            <p class="weekday-note">ページを開いている間、指定した時刻にひとこと通知します。</p>
+            <div class="field-grid two">
+              <label>
+                通知時刻
+                <input id="notificationTimeInput" type="time" value="20:00">
+              </label>
+              <label>
+                通知メッセージ
+                <input id="notificationMessageInput" type="text" placeholder="例: 今日のタスクを見直しましょう">
+              </label>
+            </div>
+            <div class="quick-add-actions">
+              <p class="form-note" id="notificationStatus">通知はオフです。</p>
+              <div class="inline-actions">
+                <button class="button secondary" id="enableNotificationButton" type="button">通知を有効化</button>
+                <button class="button secondary" id="testNotificationButton" type="button">テスト通知</button>
+              </div>
+            </div>
+          </fieldset>
+          <button class="button secondary full-width" type="submit">設定を保存</button>
+        </form>
+        <p class="settings-note">
+          このアプリはブラウザ内に保存します。同じ端末・同じブラウザなら次回も内容が残ります。
+        </p>
+      </article>
+    </section>
+  </main>
+
+  <nav class="mobile-nav" aria-label="モバイルナビゲーション">
+    <a class="mobile-nav-item active" href="#dashboard">
+      <span class="material-symbols-outlined">dashboard</span>
+      <span>ダッシュボード</span>
+    </a>
+    <a class="mobile-nav-item" href="#goals">
+      <span class="material-symbols-outlined">emoji_events</span>
+      <span>目標</span>
+    </a>
+    <a class="mobile-nav-item" href="#tasks">
+      <span class="material-symbols-outlined">calendar_today</span>
+      <span>タスク</span>
+    </a>
+    <a class="mobile-nav-item" href="#settings">
+      <span class="material-symbols-outlined">settings</span>
+      <span>設定</span>
+    </a>
+  </nav>
+
+  <script src="./methodical-flow-app.js"></script>
+</body>
+</html>

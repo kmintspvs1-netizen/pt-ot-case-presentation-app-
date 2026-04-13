@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>起算日から日数計算</title>
+  <style>
+    :root {
+      --bg-1: #f3efe4;
+      --bg-2: #dce8d4;
+      --panel: rgba(255, 252, 245, 0.88);
+      --panel-strong: #fffaf0;
+      --text: #21302a;
+      --muted: #54645d;
+      --accent: #2f6f52;
+      --accent-soft: #d7eadf;
+      --border: rgba(33, 48, 42, 0.12);
+      --shadow: 0 20px 45px rgba(33, 48, 42, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
+      color: var(--text);
+      -webkit-text-size-adjust: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.75), transparent 30%),
+        linear-gradient(135deg, var(--bg-1), var(--bg-2));
+    }
+
+    .page {
+      width: min(960px, calc(100% - 32px));
+      margin: 32px auto;
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      background: var(--panel);
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow);
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.15;
+    }
+
+    .lead {
+      margin: 0 0 28px;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    .form-card {
+      padding: 20px;
+      border-radius: 22px;
+      background: var(--panel-strong);
+      border: 1px solid var(--border);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    input[type="date"] {
+      flex: 1 1 100%;
+      width: 100%;
+      min-height: 58px;
+      padding: 0 16px;
+      border: 1px solid rgba(33, 48, 42, 0.18);
+      border-radius: 14px;
+      font-size: 16px;
+      font-family: inherit;
+      color: var(--text);
+      background: #ffffff;
+    }
+
+    button {
+      min-height: 54px;
+      padding: 0 20px;
+      border: 0;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      color: #ffffff;
+      background: var(--accent);
+    }
+
+    button.secondary {
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .summary {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      background: rgba(215, 234, 223, 0.45);
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.98rem;
+    }
+
+    .results {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .result-card {
+      padding: 20px;
+      border-radius: 22px;
+      background: var(--panel-strong);
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 24px rgba(33, 48, 42, 0.07);
+    }
+
+    .days {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .date {
+      margin: 0 0 8px;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .subtext {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .error {
+      margin-top: 16px;
+      color: #a43e2e;
+      font-weight: 700;
+      display: none;
+    }
+
+    .note {
+      margin-top: 24px;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 720px) {
+      body {
+        min-height: 100dvh;
+      }
+
+      .page {
+        width: min(100% - 20px, 960px);
+        margin: 10px auto;
+        padding: 18px 14px calc(22px + env(safe-area-inset-bottom));
+        border-radius: 20px;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .lead {
+        font-size: 0.96rem;
+        margin-bottom: 22px;
+      }
+
+      .form-card,
+      .result-card {
+        padding: 16px;
+        border-radius: 18px;
+      }
+
+      .results {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .form-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+
+      .button-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .date {
+        font-size: 1.45rem;
+      }
+
+      .summary,
+      .subtext,
+      .note {
+        font-size: 0.92rem;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .page {
+        width: calc(100% - 12px);
+        margin: 6px auto;
+        padding: 14px 10px calc(18px + env(safe-area-inset-bottom));
+      }
+
+      h1 {
+        font-size: 1.6rem;
+      }
+
+      .button-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <h1>起算日から自動で日付を計算</h1>
+    <p class="lead">
+      起算日を入れると、60日後・90日後・150日後・180日後の日付が自動で表示されます。
+      入力欄を変更した瞬間に結果が更新されるので、すぐ確認できます。
+    </p>
+
+    <section class="form-card">
+      <label for="base-date">起算日</label>
+      <div class="form-row">
+        <input id="base-date" type="date" aria-describedby="summary error-message">
+        <div class="button-row">
+          <button id="today-button" type="button">今日を入れる</button>
+          <button id="clear-button" class="secondary" type="button">クリア</button>
+        </div>
+      </div>
+      <p id="summary" class="summary">起算日を選ぶと、下に計算結果が表示されます。</p>
+      <p id="error-message" class="error" role="alert">日付を正しく入力してください。</p>
+    </section>
+
+    <section class="results" aria-live="polite">
+      <article class="result-card">
+        <p class="days">60日後</p>
+        <p class="date" id="date-60">--</p>
+        <p class="subtext" id="weekday-60">曜日がここに表示されます</p>
+      </article>
+      <article class="result-card">
+        <p class="days">90日後</p>
+        <p class="date" id="date-90">--</p>
+        <p class="subtext" id="weekday-90">曜日がここに表示されます</p>
+      </article>
+      <article class="result-card">
+        <p class="days">150日後</p>
+        <p class="date" id="date-150">--</p>
+        <p class="subtext" id="weekday-150">曜日がここに表示されます</p>
+      </article>
+      <article class="result-card">
+        <p class="days">180日後</p>
+        <p class="date" id="date-180">--</p>
+        <p class="subtext" id="weekday-180">曜日がここに表示されます</p>
+      </article>
+    </section>
+
+    <p class="note">
+      補足: 「起算日」は計算のスタートになる日付のことです。
+      たとえば 2026年4月13日 を入れると、その日から 60日後 などを自動計算します。
+    </p>
+  </main>
+
+  <script>
+    const dateInput = document.getElementById("base-date");
+    const todayButton = document.getElementById("today-button");
+    const clearButton = document.getElementById("clear-button");
+    const summary = document.getElementById("summary");
+    const errorMessage = document.getElementById("error-message");
+    const offsets = [60, 90, 150, 180];
+
+    function toDateInputValue(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function parseLocalDate(value) {
+      if (!value) {
+        return null;
+      }
+
+      const [year, month, day] = value.split("-").map(Number);
+      const date = new Date(year, month - 1, day);
+
+      if (
+        Number.isNaN(date.getTime()) ||
+        date.getFullYear() !== year ||
+        date.getMonth() !== month - 1 ||
+        date.getDate() !== day
+      ) {
+        return null;
+      }
+
+      return date;
+    }
+
+    function addDays(date, days) {
+      const result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result;
+    }
+
+    function formatDate(date) {
+      return new Intl.DateTimeFormat("ja-JP", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      }).format(date);
+    }
+
+    function formatWeekday(date) {
+      return new Intl.DateTimeFormat("ja-JP", {
+        weekday: "long"
+      }).format(date);
+    }
+
+    function resetResults() {
+      offsets.forEach((offset) => {
+        document.getElementById(`date-${offset}`).textContent = "--";
+        document.getElementById(`weekday-${offset}`).textContent = "曜日がここに表示されます";
+      });
+    }
+
+    function updateResults() {
+      const baseDate = parseLocalDate(dateInput.value);
+
+      if (!dateInput.value) {
+        errorMessage.style.display = "none";
+        summary.textContent = "起算日を選ぶと、下に計算結果が表示されます。";
+        resetResults();
+        return;
+      }
+
+      if (!baseDate) {
+        errorMessage.style.display = "block";
+        summary.textContent = "入力された日付を読み取れませんでした。";
+        resetResults();
+        return;
+      }
+
+      errorMessage.style.display = "none";
+      summary.textContent = `起算日: ${formatDate(baseDate)}（${formatWeekday(baseDate)}）`;
+
+      offsets.forEach((offset) => {
+        const resultDate = addDays(baseDate, offset);
+        document.getElementById(`date-${offset}`).textContent = formatDate(resultDate);
+        document.getElementById(`weekday-${offset}`).textContent = `${formatWeekday(resultDate)}`;
+      });
+    }
+
+    todayButton.addEventListener("click", () => {
+      dateInput.value = toDateInputValue(new Date());
+      updateResults();
+    });
+
+    clearButton.addEventListener("click", () => {
+      dateInput.value = "";
+      updateResults();
+    });
+
+    dateInput.addEventListener("input", updateResults);
+
+    dateInput.value = toDateInputValue(new Date());
+    updateResults();
+  </script>
+</body>
+</html>

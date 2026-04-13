@@ -1,0 +1,11 @@
+{
+  "name": "pt-case-draft-api",
+  "private": true,
+  "type": "commonjs",
+  "engines": {
+    "node": "22"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}

@@ -5,6 +5,22 @@
   "hosting": {
     "site": "training-accountability-app",
     "public": "public",
+    "rewrites": [
+      {
+        "source": "/api/rehab-chat",
+        "run": {
+          "serviceId": "pt-case-draft-api",
+          "region": "asia-northeast1"
+        }
+      },
+      {
+        "source": "/api/pt-case-draft",
+        "run": {
+          "serviceId": "pt-case-draft-api",
+          "region": "asia-northeast1"
+        }
+      }
+    ],
     "ignore": [
       "firebase.json",
       "**/.*",

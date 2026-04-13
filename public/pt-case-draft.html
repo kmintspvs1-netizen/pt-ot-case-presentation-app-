@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clinical Draft Studio</title>
+  <style>
+    :root {
+      --bg: #f4efe6;
+      --panel: rgba(255, 250, 243, 0.94);
+      --panel-strong: #fffdf9;
+      --ink: #1f1a17;
+      --muted: #6a6058;
+      --line: rgba(78, 58, 38, 0.14);
+      --accent: #a44931;
+      --accent-deep: #6f2f22;
+      --warn: #8a5b18;
+      --warn-bg: rgba(206, 159, 62, 0.15);
+      --danger: #9f2f2f;
+      --danger-bg: rgba(185, 59, 59, 0.12);
+      --ok-bg: rgba(47, 122, 77, 0.1);
+      --radius: 22px;
+      --shadow: 0 22px 48px rgba(75, 51, 34, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(164, 73, 49, 0.12), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(152, 124, 92, 0.15), transparent 26%),
+        linear-gradient(135deg, #f8f3eb 0%, #f0e4d5 40%, #f6f0e8 100%);
+      min-height: 100vh;
+    }
+
+    .shell { width: min(1280px, calc(100% - 28px)); margin: 26px auto 40px; }
+    .hero, .card { border-radius: var(--radius); border: 1px solid var(--line); box-shadow: var(--shadow); backdrop-filter: blur(10px); }
+    .hero { padding: 28px; background: linear-gradient(135deg, rgba(255, 251, 246, 0.96), rgba(247, 231, 211, 0.92)); }
+    .hero h1 { margin: 0; font-family: "Hiragino Mincho ProN", "Yu Mincho", serif; font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.06; }
+    .hero p { margin: 12px 0 0; max-width: 920px; color: var(--muted); line-height: 1.75; }
+    .pill-row, .action-row, .tab-row, .auth-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .pill { border-radius: 999px; padding: 8px 12px; font-size: 0.88rem; background: rgba(164, 73, 49, 0.1); color: var(--accent-deep); }
+    .banner { margin-top: 18px; padding: 14px 16px; border-radius: 18px; background: var(--warn-bg); color: var(--warn); line-height: 1.65; border: 1px solid rgba(138, 91, 24, 0.18); }
+    .card { background: var(--panel); }
+    .auth-card, .panel { padding: 22px; }
+    .auth-card { margin-top: 18px; }
+    .auth-grid, .layout { display: grid; gap: 20px; }
+    .auth-grid { grid-template-columns: 1.1fr 0.9fr; align-items: start; }
+    .layout { grid-template-columns: 280px minmax(0, 1fr); margin-top: 20px; align-items: start; }
+    .content-stack { display: grid; gap: 20px; }
+    .auth-box, .list-card { display: grid; gap: 12px; padding: 16px; border-radius: 18px; background: rgba(255, 253, 248, 0.92); border: 1px solid rgba(84, 62, 42, 0.12); }
+    .section-title { margin: 0 0 14px; font-size: 1rem; letter-spacing: 0.02em; }
+    .control-row { display: grid; gap: 12px; margin-bottom: 16px; }
+    .sidebar {
+      position: sticky; top: 24px; display: grid; gap: 16px; padding: 18px;
+      background: linear-gradient(180deg, rgba(247, 236, 223, 0.96), rgba(240, 226, 208, 0.93));
+    }
+    .sidebar-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .sidebar-top h2 { margin: 0; font-size: 1rem; }
+    .menu-grid { display: grid; gap: 10px; grid-template-columns: 1fr; margin-bottom: 0; }
+    .menu-button {
+      text-align: left; padding: 14px 16px; border-radius: 18px;
+      background: rgba(237, 226, 211, 0.88); color: var(--ink);
+      border: 1px solid rgba(84, 62, 42, 0.12);
+      transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
+    }
+    .menu-button:hover { transform: translateY(-1px); }
+    .menu-button strong, .menu-button span { display: block; }
+    .menu-button strong { margin-bottom: 4px; }
+    .menu-button span { color: var(--muted); font-size: 0.86rem; line-height: 1.5; }
+    .menu-button.active {
+      color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+      box-shadow: 0 14px 30px rgba(111, 47, 34, 0.22);
+    }
+    .menu-button.active span { color: rgba(255, 246, 239, 0.86); }
+    .sidebar-note {
+      padding: 14px 16px; border-radius: 16px; background: rgba(255, 249, 240, 0.72);
+      border: 1px solid rgba(84, 62, 42, 0.1); color: var(--muted); line-height: 1.6; font-size: 0.88rem;
+    }
+    .sidebar-toggle {
+      display: none; align-items: center; gap: 8px;
+      border-radius: 999px; padding: 10px 14px; background: #ede2d3; color: var(--ink);
+    }
+    #sidebar-close { display: none; }
+    .switch-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; border: 0; }
+    .switch-row button, .action-row button, .tab, .auth-actions button {
+      border-radius: 999px; padding: 12px 16px; transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
+    }
+    .switch-row button:hover, .action-row button:hover, .tab:hover, .auth-actions button:hover { transform: translateY(-1px); }
+    .switch-row button, .tab, .secondary { background: #ede2d3; color: var(--ink); }
+    .switch-row button.active, .action-row .primary, .auth-actions .primary, .tab.active {
+      color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-deep)); box-shadow: 0 12px 28px rgba(111, 47, 34, 0.22);
+    }
+    .ghost { background: transparent; color: var(--accent-deep); border: 1px solid rgba(111, 47, 34, 0.16); }
+    .field-grid, .stack, .meta-list, .history-list, .admin-list, .alert-list { display: grid; gap: 14px; }
+    .field-grid.two { grid-template-columns: 1fr 1fr; }
+    .field-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+    .field { display: grid; gap: 6px; }
+    label { font-size: 0.93rem; font-weight: 700; }
+    input, select, textarea {
+      width: 100%; border-radius: 16px; border: 1px solid rgba(84, 62, 42, 0.15);
+      background: rgba(255, 253, 249, 0.95); color: var(--ink); padding: 12px 14px;
+    }
+    textarea { resize: vertical; min-height: 96px; line-height: 1.65; }
+    .user-bar { display: flex; justify-content: space-between; gap: 14px; align-items: center; flex-wrap: wrap; }
+    .user-meta { display: grid; gap: 4px; }
+    .user-email { font-weight: 700; }
+    .small { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+    .alert { border-radius: 16px; padding: 12px 14px; line-height: 1.55; border: 1px solid transparent; }
+    .alert.warn { background: var(--warn-bg); border-color: rgba(138, 91, 24, 0.16); color: var(--warn); }
+    .alert.danger { background: var(--danger-bg); border-color: rgba(159, 47, 47, 0.18); color: var(--danger); }
+    .alert.ok { background: var(--ok-bg); border-color: rgba(47, 122, 77, 0.16); color: #225b38; }
+    .history-item, .admin-item {
+      text-align: left; padding: 14px; border-radius: 16px; background: rgba(255, 251, 245, 0.9);
+      border: 1px solid rgba(84, 62, 42, 0.12); color: var(--ink);
+    }
+    .history-item strong, .history-item span, .admin-item strong, .admin-item span { display: block; }
+    .history-item strong, .admin-item strong { margin-bottom: 6px; }
+    .history-item span, .admin-item span { color: var(--muted); font-size: 0.9rem; line-height: 1.55; }
+    .output { min-height: 420px; border-radius: 18px; border: 1px solid rgba(84, 62, 42, 0.12); background: var(--panel-strong); padding: 18px; overflow: auto; line-height: 1.72; white-space: pre-wrap; }
+    ul { margin: 0; padding-left: 1.2rem; }
+    li + li { margin-top: 6px; }
+    .hidden { display: none !important; }
+    .drawer-backdrop {
+      position: fixed; inset: 0; z-index: 50; padding: 22px;
+      background: rgba(43, 29, 20, 0.28); display: flex; justify-content: flex-end; align-items: flex-start;
+    }
+    #sidebar-backdrop {
+      z-index: 44;
+      justify-content: flex-start;
+    }
+    .history-drawer {
+      width: min(420px, calc(100vw - 28px)); max-height: calc(100vh - 44px); overflow: auto;
+      padding: 18px;
+      background:
+        linear-gradient(180deg, rgba(235, 223, 207, 0.98), rgba(228, 214, 196, 0.96));
+      border-color: rgba(105, 74, 48, 0.16);
+      box-shadow: 0 28px 56px rgba(58, 39, 25, 0.18);
+    }
+    .history-drawer .history-item {
+      background: rgba(241, 230, 214, 0.94);
+      border-color: rgba(105, 74, 48, 0.14);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    }
+    .history-drawer .history-item:hover {
+      background: rgba(232, 219, 201, 0.97);
+    }
+    .history-drawer .small {
+      color: #5e5349;
+    }
+    .drawer-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .drawer-head h3 { margin: 0; font-size: 1rem; }
+    @media (max-width: 980px) {
+      .auth-grid, .layout, .field-grid.two, .field-grid.three { grid-template-columns: 1fr; }
+      .content-stack { grid-template-columns: 1fr; }
+      .sidebar {
+        position: fixed; left: 12px; top: 12px; bottom: 12px; width: min(320px, calc(100vw - 24px));
+        z-index: 46; overflow: auto; transform: translateX(-110%); transition: transform 180ms ease;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-toggle { display: inline-flex; }
+      #sidebar-close { display: inline-flex; }
+      .drawer-backdrop { padding: 10px; }
+      .history-drawer { max-height: calc(100vh - 20px); }
+    }
+    @media (max-width: 720px) {
+      .shell { width: min(100% - 18px, 100%); margin-top: 18px; }
+      .hero, .auth-card, .panel { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="hero">
+      <h1>Clinical Draft Studio</h1>
+      <p>匿名化した症例情報から、PT / OT の症例発表ドラフトと Evidence Review を作るアプリです。症例発表とEBPTを分けて使いながら、必要なら Evidence Review の内容を症例発表へ差し込めます。</p>
+      <div class="pill-row">
+        <span class="pill">PT / OT 切替</span>
+        <span class="pill">症例発表</span>
+        <span class="pill">Evidence Review</span>
+        <span class="pill">履歴保存</span>
+      </div>
+      <div class="banner">
+        氏名、生年月日、病院名、具体日付、患者IDは入力しない前提です。出力は臨床支援用ドラフトであり、診断や最終判断の代替には使いません。禁忌、術後制限、負荷量、対外発表前の表現は必ず担当療法士・作業療法士が確認してください。
+      </div>
+    </section>
+
+    <section class="card auth-card">
+      <div id="signed-out-view" class="auth-grid">
+        <div>
+          <h2 class="section-title">会員登録 / ログイン</h2>
+          <p class="small">履歴を保存してあとから見返せるように、会員登録制にしました。メールアドレスとパスワードで登録できます。</p>
+          <p class="small">保存する症例情報は引き続き匿名化前提です。</p>
+        </div>
+        <div class="auth-box">
+          <div class="field">
+            <label for="authName">表示名（任意）</label>
+            <input id="authName" placeholder="例: 山中">
+          </div>
+          <div class="field">
+            <label for="authEmail">メールアドレス</label>
+            <input id="authEmail" type="email" placeholder="name@example.com">
+          </div>
+          <div class="field">
+            <label for="authPassword">パスワード</label>
+            <input id="authPassword" type="password" placeholder="6文字以上">
+          </div>
+          <div class="auth-actions">
+            <button id="register-button" class="primary" type="button">会員登録</button>
+            <button id="login-button" class="secondary" type="button">ログイン</button>
+          </div>
+          <p id="auth-status" class="small">登録済みならログイン、初めてなら会員登録を押してください。</p>
+        </div>
+      </div>
+
+      <div id="signed-in-view" class="user-bar hidden">
+        <div class="user-meta">
+          <span id="current-user-name" class="user-email"></span>
+          <span id="current-user-email" class="small"></span>
+          <span id="current-user-role" class="small"></span>
+        </div>
+        <div class="auth-actions">
+          <button id="sidebar-toggle" class="sidebar-toggle" type="button">メニュー</button>
+          <button id="toggle-history" class="secondary" type="button">履歴</button>
+          <button id="refresh-admin" class="secondary hidden" type="button">管理情報を更新</button>
+          <button id="logout-button" class="ghost" type="button">ログアウト</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="app-shell" class="layout hidden">
+      <aside id="sidebar" class="card sidebar">
+        <div class="sidebar-top">
+          <h2>メニュー</h2>
+          <button id="sidebar-close" class="ghost" type="button">閉じる</button>
+        </div>
+        <div class="menu-grid">
+          <button class="menu-button active" type="button" data-menu="pt_initial">
+            <strong>PT 初期評価</strong>
+            <span>理学療法の初回評価ドラフトを作る</span>
+          </button>
+          <button class="menu-button" type="button" data-menu="pt_final">
+            <strong>PT 最終評価</strong>
+            <span>理学療法の最終発表ドラフトを作る</span>
+          </button>
+          <button class="menu-button" type="button" data-menu="ot_initial">
+            <strong>OT 初期評価</strong>
+            <span>作業療法の初回評価ドラフトを作る</span>
+          </button>
+          <button class="menu-button" type="button" data-menu="ot_final">
+            <strong>OT 最終評価</strong>
+            <span>作業療法の最終発表ドラフトを作る</span>
+          </button>
+          <button class="menu-button" type="button" data-menu="evidence_review">
+            <strong>Evidence Review</strong>
+            <span>EBPT 5ステップで整理する</span>
+          </button>
+          <button class="menu-button" type="button" data-menu="history">
+            <strong>履歴</strong>
+            <span>過去の生成結果を開く</span>
+          </button>
+        </div>
+        <div class="sidebar-note">
+          画面の種類をここで選びます。モバイルでは「メニュー」から開閉できます。
+        </div>
+      </aside>
+      <div class="content-stack">
+      <section class="card panel">
+        <h2 class="section-title">入力</h2>
+        <div class="control-row hidden">
+          <div>
+            <label class="small">職種</label>
+            <div class="switch-row" style="margin-top: 8px;">
+              <button id="profession-pt" class="active" type="button">PT</button>
+              <button id="profession-ot" type="button">OT</button>
+            </div>
+          </div>
+          <div>
+            <label class="small">モード</label>
+            <div class="switch-row" style="margin-top: 8px;">
+              <button id="feature-case" class="active" type="button">症例発表</button>
+              <button id="feature-evidence" type="button">Evidence Review</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="alert-list" class="alert-list hidden"></div>
+
+        <section id="case-section" class="stack">
+          <div class="switch-row">
+            <button id="mode-initial" class="active" type="button">初回評価</button>
+            <button id="mode-final" type="button">最終発表</button>
+          </div>
+
+          <div class="field-grid three">
+            <div class="field">
+              <label for="ageBand">年齢帯</label>
+              <select id="ageBand">
+                <option value="">選択してください</option>
+                <option>10代</option><option>20代</option><option>30代</option><option>40代</option>
+                <option>50代</option><option>60代</option><option>70代前半</option><option>70代後半</option>
+                <option>80代前半</option><option>80代後半</option><option>90代以上</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="sex">性別</label>
+              <select id="sex">
+                <option value="">選択してください</option>
+                <option>男性</option><option>女性</option><option>その他 / 非開示</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="setting">診療設定</label>
+              <input id="setting" placeholder="例: 回復期病棟、外来、訪問">
+            </div>
+          </div>
+
+          <div class="field-grid two">
+            <div class="field">
+              <label for="diagnosis">診断名</label>
+              <input id="diagnosis" placeholder="例: 右変形性膝関節症">
+            </div>
+            <div class="field">
+              <label for="timing">発症後 / 術後時期</label>
+              <input id="timing" placeholder="例: 術後3週、発症後2か月">
+            </div>
+          </div>
+
+          <div class="field"><label for="chiefComplaint">主訴</label><textarea id="chiefComplaint"></textarea></div>
+          <div class="field-grid two">
+            <div class="field"><label for="patientGoal">患者目標</label><textarea id="patientGoal"></textarea></div>
+            <div class="field"><label for="therapistGoal">療法士 / 療法目標</label><textarea id="therapistGoal"></textarea></div>
+          </div>
+          <div class="field-grid two">
+            <div class="field"><label for="adl">ADL / 活動制限</label><textarea id="adl"></textarea></div>
+            <div class="field"><label for="participation">参加制約</label><textarea id="participation"></textarea></div>
+          </div>
+          <div class="field"><label for="findings">主要所見</label><textarea id="findings"></textarea></div>
+          <div class="field-grid two">
+            <div class="field"><label for="background">生活背景</label><textarea id="background"></textarea></div>
+            <div class="field"><label for="precautions">注意点・禁忌</label><textarea id="precautions"></textarea></div>
+          </div>
+          <div class="field"><label for="currentTreatment">現在の治療</label><textarea id="currentTreatment"></textarea></div>
+
+          <section id="initial-fields" class="stack">
+            <div class="field"><label for="proposedPlan">想定する治療方針</label><textarea id="proposedPlan"></textarea></div>
+          </section>
+
+          <section id="final-fields" class="stack hidden">
+            <div class="field"><label for="initialSummary">初期評価の要点</label><textarea id="initialSummary"></textarea></div>
+            <div class="field"><label for="interventions">実施した治療</label><textarea id="interventions"></textarea></div>
+            <div class="field-grid two">
+              <div class="field"><label for="period">治療期間</label><input id="period"></div>
+              <div class="field"><label for="frequency">頻度</label><input id="frequency"></div>
+            </div>
+            <div class="field"><label for="progress">経過</label><textarea id="progress"></textarea></div>
+            <div class="field"><label for="reassessment">再評価結果</label><textarea id="reassessment"></textarea></div>
+            <div class="field-grid two">
+              <div class="field"><label for="improved">改善した点</label><textarea id="improved"></textarea></div>
+              <div class="field"><label for="remaining">残存問題</label><textarea id="remaining"></textarea></div>
+            </div>
+            <div class="field"><label for="nextSteps">今後の課題</label><textarea id="nextSteps"></textarea></div>
+          </section>
+        </section>
+
+        <section id="evidence-section" class="stack hidden">
+          <div class="field"><label for="evClinicalQuestion">臨床疑問</label><textarea id="evClinicalQuestion" placeholder="例: この症例にどの介入が有効か"></textarea></div>
+          <div class="field"><label for="evTargetProblem">対象となる問題</label><textarea id="evTargetProblem" placeholder="例: 歩行不安定性、上肢機能低下"></textarea></div>
+          <div class="field-grid two">
+            <div class="field"><label for="evCandidateIntervention">検討したい介入</label><textarea id="evCandidateIntervention"></textarea></div>
+            <div class="field"><label for="evComparison">比較対象</label><textarea id="evComparison"></textarea></div>
+          </div>
+          <div class="field-grid two">
+            <div class="field"><label for="evDesiredOutcome">見たいアウトカム</label><textarea id="evDesiredOutcome"></textarea></div>
+            <div class="field"><label for="evTimeframe">時間軸</label><textarea id="evTimeframe"></textarea></div>
+          </div>
+          <div class="field"><label for="evCaseSummary">症例要約</label><textarea id="evCaseSummary"></textarea></div>
+          <div class="field"><label for="evProvidedPaper">論文・抄録メモ</label><textarea id="evProvidedPaper" placeholder="読んだ論文や抄録があれば貼る"></textarea></div>
+          <div class="field"><label for="evNotes">メモ</label><textarea id="evNotes"></textarea></div>
+        </section>
+
+        <div class="action-row">
+          <button id="generate" class="primary" type="button">症例発表を生成</button>
+          <button id="load-example" class="secondary" type="button">匿名サンプルを読み込む</button>
+          <button id="clear-form" class="ghost" type="button">クリア</button>
+        </div>
+        <p id="status" class="small">入力内容を匿名化したうえで、症例発表または Evidence Review のたたき台を作成します。</p>
+      </section>
+
+      <section class="card panel">
+        <h2 class="section-title">出力</h2>
+
+        <div id="admin-panel" class="list-card hidden">
+          <h3>管理者画面</h3>
+          <div id="admin-list" class="admin-list">
+            <div class="admin-item">
+              <strong>管理情報はまだありません</strong>
+              <span>管理者でログインするとユーザー一覧が表示されます。</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-row" style="margin-top: 14px;">
+          <button class="tab active" type="button" data-tab="main">メイン出力</button>
+          <button class="tab" type="button" data-tab="review">確認ポイント</button>
+          <button class="tab" type="button" data-tab="structured">構造化データ</button>
+        </div>
+
+        <div class="action-row" style="margin-top: 14px;">
+          <button id="insert-evidence" class="secondary hidden" type="button">症例発表へ差し込む</button>
+          <span id="linked-evidence-notice" class="small hidden"></span>
+        </div>
+
+        <div id="output" class="output" style="margin-top: 14px;">ここに結果が表示されます。</div>
+
+        <div class="action-row" style="margin-top: 14px;">
+          <button id="copy-output" class="primary" type="button">表示中の内容をコピー</button>
+          <button id="download-output" class="secondary" type="button">Markdown保存</button>
+        </div>
+
+        <div class="meta-list" style="margin-top: 14px;">
+          <div class="list-card">
+            <h3>不足情報</h3>
+            <ul id="missing-list"><li>生成後に表示されます。</li></ul>
+          </div>
+          <div class="list-card">
+            <h3>注意点</h3>
+            <ul id="caution-list"><li>生成後に表示されます。</li></ul>
+          </div>
+        </div>
+        <p class="small" style="margin-top: 12px;">AI出力はそのまま完成稿にせず、担当療法士・作業療法士が確認してから使用してください。</p>
+      </section>
+      </div>
+    </div>
+  </div>
+
+  <div id="sidebar-backdrop" class="drawer-backdrop hidden"></div>
+  <div id="history-backdrop" class="drawer-backdrop hidden">
+    <section class="card history-drawer" aria-label="履歴">
+      <div class="drawer-head">
+        <h3>履歴</h3>
+        <div class="auth-actions">
+          <button id="refresh-history" class="secondary" type="button">更新</button>
+          <button id="close-history" class="ghost" type="button">閉じる</button>
+        </div>
+      </div>
+      <p class="small">生成した症例発表と Evidence Review をここから読み戻せます。</p>
+      <div id="history-list" class="history-list">
+        <button class="history-item" type="button" disabled>
+          <strong>履歴はまだありません</strong>
+          <span>生成した症例発表と Evidence Review がここに保存されます。</span>
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="./pt-case-draft.js"></script>
+</body>
+</html>

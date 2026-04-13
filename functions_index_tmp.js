@@ -105,10 +105,7 @@ exports.sendTeamEntryNotification = onDocumentUpdated(
         return;
       }
       const code = result.error?.code || "";
-      if (
-        code === "messaging/registration-token-not-registered" ||
-        code === "messaging/invalid-registration-token"
-      ) {
+      if (code === "messaging/registration-token-not-registered" || code === "messaging/invalid-registration-token") {
         staleRefs.push(uniqueDeliveries[index].ref);
       }
       logger.warn("Failed to send push notification", {
